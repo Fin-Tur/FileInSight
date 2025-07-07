@@ -1,0 +1,20 @@
+# Build-Artefakte
+*.o
+*.out
+*.exe
+*.log
+*.bin
+*.tmp
+*.obj
+build/
+cmake-build*/
+
+# System-Dateien
+.DS_Store
+Thumbs.db
+
+# User-spezifisch
+*.swp
+*.swo
+.idea/
+.vscode/
