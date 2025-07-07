@@ -78,3 +78,43 @@ void HuffmanCompressor::parseHuffTree(HuffmanTree::Node *n, std::unordered_map<u
         parseHuffTree(n->right, mp, path+"1");
     }
 }
+
+void HuffmanCompressor::decompress(const std::filesystem::path &compressedPath, const std::filesystem::path &outputPath) {
+    //Open compressed file
+    std::ifstream ifs(compressedPath, std::ios::binary);
+    //Get Size of HuffmanTree
+    std::uint8_t hufftreeSize;
+    ifs.read(reinterpret_cast<char *>(&hufftreeSize), sizeof(hufftreeSize));
+    //Get huffman Tree
+    std::string treeData(hufftreeSize, '\0');
+    ifs.read(&treeData[0], hufftreeSize);
+    //Construct HuffmanTree
+    std::stringstream treeStream(treeData);
+    HuffmanTree huffTree;
+    huffTree.deserialize(treeStream);
+    //Read compressed Data
+    std::ostringstream compressedBuffer;
+    compressedBuffer << ifs.rdbuf();
+    std::string compressedData = compressedBuffer.str();
+    ifs.close();
+
+    //Decompress and Write compressed Data
+    std::ofstream ofs(outputPath, std::ios::binary);
+    HuffmanTree::Node* node = huffTree.root;
+
+    for (unsigned char byte : compressedData) {
+        std::bitset<8> bits(byte);
+        for (int i = 7; i >= 0; --i) {
+            if (bits[i] == 0) node = node->left;
+            if (bits[i] == 1) node = node->right;
+
+            if (node->isLeaf()) {
+                ofs.put(node->value);
+                node = huffTree.root;
+            }
+        }
+    }
+    ofs.close();
+
+}
+
