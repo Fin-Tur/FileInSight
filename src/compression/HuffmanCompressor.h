@@ -14,7 +14,7 @@ public:
     static void compress(const std::filesystem::path& inputPath,
                   const std::filesystem::path& outputPath);
 
-    void decompress(const std::filesystem::path& compressedPath,
+    static void decompress(const std::filesystem::path& compressedPath,
                     const std::filesystem::path& outputPath);
 
     static void parseHuffTree(HuffmanTree::Node* n, std::unordered_map<unsigned char, std::string>* mp, std::string path);

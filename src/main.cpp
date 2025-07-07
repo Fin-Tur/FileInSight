@@ -2,6 +2,7 @@
 
 #include "finder/DuplicateFinder.h"
 #include "core/FileCollecter.h"
+void testCompressionRoundtrip(const std::filesystem::path& inputFile);
 
 int main() {
 
@@ -9,6 +10,7 @@ int main() {
     interface.start_ui();
 
     std::system("pause");
+
 
     return 0;
 
