@@ -21,6 +21,7 @@ public:
     void start_duplicateSearch();
     static void start_regexSearch();
     static void start_agingSearch();
+    static void start_compression();
     static bool verifyPassword();
 };
 

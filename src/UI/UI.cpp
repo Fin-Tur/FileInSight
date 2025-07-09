@@ -6,6 +6,7 @@
 
 #include <algorithm>
 
+#include "../compression/HuffmanCompressor.h"
 #include "../finder/AgingFileFinder.h"
 #include "../hashing/picosha2.h"
 #include "../finder/RegExFinder.h"
@@ -27,9 +28,11 @@ void UI::start_ui() {
     while (true) {
         this->freedMemory = 0;
         this->duplicateDataAmount = 0;
+        std::cout << "\nPress ENTER to return to main menu...";
+        std::cin.ignore(); std::cin.get();
         std::system("cls");
 
-        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A: Aged Search]\n[E : Exit]\n";
+        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A: Aged Search]\n[C : Compression]\n[E : Exit]\n";
         std::string input;
         std::cin >> input;
         std::transform(input.begin(), input.end(), input.begin(), ::tolower);
@@ -39,7 +42,9 @@ void UI::start_ui() {
             start_regexSearch();
         }else if (input == "a") {
             start_agingSearch();
-        }else if (input == "e") {
+        }else if (input == "c") {
+            start_compression();
+        }else if (input == "e"){
             break;
         }
     }
@@ -56,7 +61,7 @@ void UI::start_duplicateSearch() {
 
 
     try {
-        std::vector<FileInfo> files = FileCollector::collect(filePath);
+        const std::vector<FileInfo> files = FileCollector::collect(filePath);
         DuplicateFinder finder(files);
         std::vector<std::vector<FileInfo>> duplicates = finder.find();
 
@@ -135,9 +140,9 @@ void UI::start_agingSearch() {
     std::cin >> lastUsed;
 
     try {
-        std::vector<FileInfo> files = FileCollector::collect(filePath);
+        const std::vector<FileInfo> files = FileCollector::collect(filePath);
         AgingFileFinder finder(files, lastUsed);
-        std::vector<FileInfo> results = finder.find()[0];
+        const std::vector<FileInfo> results = finder.find()[0];
         if (results.empty()) {std::cout <<"\nNo matches found!";}
 
         for (auto& file: results) {
@@ -148,4 +153,44 @@ void UI::start_agingSearch() {
         std::cout << "\nError :" << e.what() << std::endl;
     }
 }
+
+void UI::start_compression() {
+
+    std::string stringPathToFile;
+    std::cout << "Please enter path to compression: ";
+    std::cin >> stringPathToFile;
+
+    if (!std::filesystem::exists(stringPathToFile)) {
+        std::cout << "\n[Error] File does not exist!\n";
+        return;
+    }
+
+    std::cout << "Do you want to compress or decompress file? \n[C : Compress]\n[D : Decompress]";
+    std::string whatToDo;
+    std::cin >> whatToDo;
+
+    if (whatToDo == "C" or whatToDo == "c") {
+
+        auto originalSize = static_cast<std::intmax_t>(std::filesystem::file_size(stringPathToFile));
+        HuffmanCompressor::compress(stringPathToFile, stringPathToFile + ".huff");
+        auto compressedSize = static_cast<std::intmax_t>(std::filesystem::file_size(stringPathToFile + ".huff"));
+        std::cout << "Compression done: Saved Memory -> "<< originalSize - compressedSize << " Bytes!\n";
+        std::filesystem::remove(stringPathToFile);
+    }else if (whatToDo == "D" or whatToDo == "d") {
+        std::string outputFile = stringPathToFile.substr(0, stringPathToFile.size()-5);
+        if (stringPathToFile.size() < 5 || stringPathToFile.substr(stringPathToFile.size() - 5) != ".huff") {
+            std::cout << "[Error] Expected .huff file for decompression!\n";
+            return;
+        }
+        HuffmanCompressor::decompress(stringPathToFile, outputFile);
+        std::cout << "Decompression done!\n";
+        std::filesystem::remove(stringPathToFile);
+
+    }else {
+        std::cout << "[Error] Invalid Rqeuest!\n";
+        return;
+    }
+
+}
+
 
