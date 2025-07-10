@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.31)
 project(FileInSight)
 
 set(CMAKE_CXX_STANDARD 20)
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
 
-# ZSTD einbinden
-find_package(ZSTD REQUIRED)
+# Manuelles Einbinden von ZSTD
+include_directories("C:/vcpkg/installed/x64-windows-static/include")
+link_directories("C:/vcpkg/installed/x64-windows-static/lib")
 
 add_executable(FileInSight
         src/main.cpp
@@ -30,7 +30,9 @@ add_executable(FileInSight
         src/compression/HuffmanTree.cpp
         src/compression/HuffmanTree.h
         src/tests/TestCompression.cpp
+        src/compression/zstdCompressor.cpp
+        src/compression/zstdCompressor.h
 )
 
-# ZSTD an dein Executable binden
-target_link_libraries(FileInSight PRIVATE ZSTD::ZSTD)
+# ZSTD statisch linken
+target_link_libraries(FileInSight PRIVATE zstd)

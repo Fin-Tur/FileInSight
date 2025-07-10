@@ -30,6 +30,7 @@ void HuffmanCompressor::compress(const std::filesystem::path &inputPath, const s
     std::uint16_t huffSize = temp.str().size();
     //create code to compromise file
     std::unordered_map<unsigned char, std::string> hufftreeCode;
+
     parseHuffTree(huffmanTree.root, &hufftreeCode, "");
     //Compromise Data
     std::string bitBuffer;
