@@ -5,13 +5,13 @@
 #include <bitset>
 #include <sstream>
 
-void HuffmanCompressor::compress(const std::filesystem::path &inputPath, const std::filesystem::path &outputPath) {
+bool HuffmanCompressor::compress(const std::filesystem::path& src, const std::filesystem::path& dst) {
     //Create FreqMap
     std::unordered_map<unsigned char, int> freqMap;
-    std::ifstream ifs(inputPath, std::ios::binary);
+    std::ifstream ifs(src, std::ios::binary);
     if (!ifs.is_open()) {
-        std::cerr << "Error opening file " << inputPath << std::endl;
-        return;
+        std::cerr << "Error opening file " << src << std::endl;
+        return false;
     }
     //gather original Datasize to store in file for lateron padding
     std::string originalData;
@@ -45,7 +45,7 @@ void HuffmanCompressor::compress(const std::filesystem::path &inputPath, const s
         byteStream += static_cast<unsigned char>(bits.to_ulong());
     }
     //Open output file
-    std::ofstream ofs(outputPath, std::ios::binary);
+    std::ofstream ofs(dst, std::ios::binary);
     std::uint32_t originalSize = originalData.size();
     //Write size of tree, and size of data without padding
     ofs.write(reinterpret_cast<const char *>(&huffSize), sizeof(huffSize));
@@ -53,6 +53,8 @@ void HuffmanCompressor::compress(const std::filesystem::path &inputPath, const s
     ofs.write(reinterpret_cast<const char *>(&originalSize), sizeof(originalSize)); // Originalgröße
     ofs.write(byteStream.data(), byteStream.size());
     ofs.close();
+
+    return true;
 }
 //Create Huff-Code Map
 void HuffmanCompressor::parseHuffTree(HuffmanTree::Node *n, std::unordered_map<unsigned char, std::string>* mp, std::string path) {
@@ -65,8 +67,8 @@ void HuffmanCompressor::parseHuffTree(HuffmanTree::Node *n, std::unordered_map<u
     }
 }
 
-void HuffmanCompressor::decompress(const std::filesystem::path &compressedPath, const std::filesystem::path &outputPath) {
-    std::ifstream ifs(compressedPath, std::ios::binary);
+bool HuffmanCompressor::decompress(const std::filesystem::path& src, const std::filesystem::path& dst) {
+    std::ifstream ifs(src, std::ios::binary);
     //Read size of huff-tree
     std::uint16_t hufftreeSize;
     ifs.read(reinterpret_cast<char *>(&hufftreeSize), sizeof(hufftreeSize));
@@ -86,7 +88,7 @@ void HuffmanCompressor::decompress(const std::filesystem::path &compressedPath, 
     std::string compressedData = compressedBuffer.str();
     ifs.close();
 
-    std::ofstream ofs(outputPath, std::ios::binary);
+    std::ofstream ofs(dst, std::ios::binary);
     HuffmanTree::Node* node = huffTree.root;
     //decompress data using huff tree
     std::uint32_t written = 0;
@@ -105,4 +107,5 @@ void HuffmanCompressor::decompress(const std::filesystem::path &compressedPath, 
     }
 
     ofs.close();
+    return true;
 }

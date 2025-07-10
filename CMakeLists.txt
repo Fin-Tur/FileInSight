@@ -33,6 +33,7 @@ add_executable(FileInSight
         src/compression/zstdCompression.cpp
         src/compression/zstdCompression.h
         src/tests/TestCompression.cpp
+        src/compression/AbstractCompressor.h
 )
 
 # === Link against the static zstd library ===

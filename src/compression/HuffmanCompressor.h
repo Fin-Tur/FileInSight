@@ -6,16 +6,16 @@
 #define HUFFMANCOMPRESSOR_H
 #include <filesystem>
 #include <fstream>
+
+#include "AbstractCompressor.h"
 #include "HuffmanTree.h"
 
 
-class HuffmanCompressor {
+class HuffmanCompressor :public AbstractCompressor{
 public:
-    static void compress(const std::filesystem::path& inputPath,
-                  const std::filesystem::path& outputPath);
+    bool compress(const std::filesystem::path& src, const std::filesystem::path& dst) override;
 
-    static void decompress(const std::filesystem::path& compressedPath,
-                    const std::filesystem::path& outputPath);
+    bool decompress(const std::filesystem::path& src, const std::filesystem::path& dst) override;
 
     static void parseHuffTree(HuffmanTree::Node* n, std::unordered_map<unsigned char, std::string>* mp, std::string path);
 };
