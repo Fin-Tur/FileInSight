@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "../compression/HuffmanCompressor.h"
+#include "../compression/zstdCompression.h"
 #include "../finder/AgingFileFinder.h"
 #include "../hashing/picosha2.h"
 #include "../finder/RegExFinder.h"
@@ -16,7 +17,6 @@ bool UI::verifyPassword() {
     std::cin >> input;
     return picosha2::hash256_hex_string(input) == passwordHashed;
 }
-
 
 void UI::start_ui() {
 
@@ -48,9 +48,6 @@ void UI::start_ui() {
             break;
         }
     }
-
-
-
 }
 
 void UI::start_duplicateSearch() {
@@ -164,6 +161,17 @@ void UI::start_compression() {
         std::cout << "\n[Error] File does not exist!\n";
         return;
     }
+    //get compression alg
+    std::string alg;
+    std::cout << "Please enter algorithm: [H : Huffman] , [Z : zstd]";
+    std::cin >> alg;
+    std::unique_ptr<AbstractCompressor> compressor;
+    if (alg == "H" or alg == "h") {
+        compressor = std::make_unique<HuffmanCompressor>();
+    }else {
+        compressor = std::make_unique<zstdCompressor>();
+    }
+
     //Get Action
     std::cout << "Do you want to compress or decompress file? \n[C : Compress]\n[D : Decompress]";
     std::string decision;
@@ -179,21 +187,30 @@ void UI::start_compression() {
             if (!(decision == "Y" or decision == "y")) {return;}
         }
 
-        HuffmanCompressor::compress(stringPathToFile, stringPathToFile + ".huff");
-        auto compressedSize = static_cast<std::intmax_t>(std::filesystem::file_size(stringPathToFile + ".huff"));
-        std::cout << "Compression done: Saved Memory -> "<< bytesToKB(originalSize - compressedSize) << " KiloBytes!\n";
-        std::filesystem::remove(stringPathToFile);
+        if (compressor->compress(stringPathToFile, stringPathToFile + ".fisc")) {
+            auto compressedSize = static_cast<std::intmax_t>(std::filesystem::file_size(stringPathToFile + ".fisc"));
+            std::cout << "Compression done: Saved Memory -> "<< bytesToKB(originalSize - compressedSize) << " KiloBytes!\n";
+            std::filesystem::remove(stringPathToFile);
+        }else {
+            std::cout << "Comrpession failed!\n";
+        }
+
 
     }else if (decision == "D" or decision == "d") {
         //Decompromise
         std::string outputFile = stringPathToFile.substr(0, stringPathToFile.size()-5);
-        if (stringPathToFile.size() < 5 || stringPathToFile.substr(stringPathToFile.size() - 5) != ".huff") {
-            std::cout << "[Error] Expected .huff file for decompression!\n";
+        if (stringPathToFile.size() < 5 || stringPathToFile.substr(stringPathToFile.size() - 5) != ".fisc") {
+            std::cout << "[Error] Expected .fisc file for decompression!\n";
             return;
         }
-        HuffmanCompressor::decompress(stringPathToFile, outputFile);
-        std::cout << "Decompression done!\n";
-        std::filesystem::remove(stringPathToFile);
+
+        if (compressor->decompress(stringPathToFile, outputFile)) {
+            std::cout << "Decompression done!\n";
+            std::filesystem::remove(stringPathToFile);
+        }else {
+            std::cout << "Decompression failed!\n";
+        }
+
 
     }else {
         std::cout << "[Error] Invalid Rqeuest!\n";
