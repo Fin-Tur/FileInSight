@@ -32,7 +32,7 @@ void UI::start_ui() {
         std::cin.ignore(); std::cin.get();
         std::system("cls");
 
-        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A: Aged Search]\n[C : Compression]\n[E : Exit]\n";
+        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A : Aged Search]\n[C : Compression]\n[E : Exit]\n";
         std::string input;
         std::cin >> input;
         std::transform(input.begin(), input.end(), input.begin(), ::tolower);
@@ -92,8 +92,8 @@ void UI::start_duplicateSearch() {
 
         }
 
-        std::cout << "Total Duplicate Data: " << this->duplicateDataAmount/1024.0 << "kB" << std::endl;
-        std::cout << "Freed Memory: " << this->freedMemory/1024.0 << "kB" << std::endl;
+        std::cout << "Total Duplicate Data: " << bytesToKB(this->duplicateDataAmount) << "kB" << std::endl;
+        std::cout << "Freed Memory: " << bytesToKB(this->freedMemory) << "kB" << std::endl;
 
 
     }catch (std::exception& e) {
@@ -155,7 +155,7 @@ void UI::start_agingSearch() {
 }
 
 void UI::start_compression() {
-
+    //Get path
     std::string stringPathToFile;
     std::cout << "Please enter path to compression: ";
     std::cin >> stringPathToFile;
@@ -164,19 +164,28 @@ void UI::start_compression() {
         std::cout << "\n[Error] File does not exist!\n";
         return;
     }
-
+    //Get Action
     std::cout << "Do you want to compress or decompress file? \n[C : Compress]\n[D : Decompress]";
-    std::string whatToDo;
-    std::cin >> whatToDo;
+    std::string decision;
+    std::cin >> decision;
 
-    if (whatToDo == "C" or whatToDo == "c") {
-
+    if (decision == "C" or decision == "c") {
+        //Compromise
         auto originalSize = static_cast<std::intmax_t>(std::filesystem::file_size(stringPathToFile));
+        //Check file for size and throw warning if < 1 kb
+        if (bytesToKB(originalSize) < 1) {
+            std::cout << "\n[Warning] File size is under 1 KB: Compromising might increase size! [Y:N]\n";
+            std::cin >> decision;
+            if (!(decision == "Y" or decision == "y")) {return;}
+        }
+
         HuffmanCompressor::compress(stringPathToFile, stringPathToFile + ".huff");
         auto compressedSize = static_cast<std::intmax_t>(std::filesystem::file_size(stringPathToFile + ".huff"));
-        std::cout << "Compression done: Saved Memory -> "<< originalSize - compressedSize << " Bytes!\n";
+        std::cout << "Compression done: Saved Memory -> "<< bytesToKB(originalSize - compressedSize) << " KiloBytes!\n";
         std::filesystem::remove(stringPathToFile);
-    }else if (whatToDo == "D" or whatToDo == "d") {
+
+    }else if (decision == "D" or decision == "d") {
+        //Decompromise
         std::string outputFile = stringPathToFile.substr(0, stringPathToFile.size()-5);
         if (stringPathToFile.size() < 5 || stringPathToFile.substr(stringPathToFile.size() - 5) != ".huff") {
             std::cout << "[Error] Expected .huff file for decompression!\n";

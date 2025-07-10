@@ -12,8 +12,6 @@
 const std::string passwordHashed = "245ed3bcc0f0652aa9d4a3b2098a5878c1e4745ff8b01a5efbe11adbe93291ab";
 
 class UI {
-    long duplicateDataAmount = 0;
-    long freedMemory = 0;
 
 public:
     UI() = default;
@@ -23,6 +21,13 @@ public:
     static void start_agingSearch();
     static void start_compression();
     static bool verifyPassword();
+
+private:
+    long duplicateDataAmount = 0;
+    long freedMemory = 0;
+
+    static std::intmax_t bytesToKB(std::intmax_t bytes){return bytes/1024;}
+    static std::intmax_t bytesToMB(std::intmax_t bytes){return (bytes/1024)/1024;}
 };
 
 
