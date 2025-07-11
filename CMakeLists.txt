@@ -34,7 +34,21 @@ add_executable(FileInSight
         src/compression/zstdCompression.h
         src/tests/TestCompression.cpp
         src/compression/AbstractCompressor.h
+        src/hashing/FuzzyHasher.cpp
+        src/hashing/FuzzyHasher.h
+        src/finder/SimilarityFinder.cpp
+        src/finder/SimilarityFinder.h
 )
 
-# === Link against the static zstd library ===
-target_link_libraries(FileInSight PRIVATE zstd)
+# === TLSH static lib ===
+add_library(tlsh STATIC
+        src/thirdparty/fuzzyhashLib/tlsh_impl.cpp
+        src/thirdparty/fuzzyhashLib/tlsh_util.cpp
+        src/thirdparty/fuzzyhashLib/tlsh.cpp
+)
+
+target_include_directories(tlsh PUBLIC src/thirdparty/fuzzyhashLib)
+target_include_directories(FileInSight PRIVATE src/thirdparty/fuzzyhashLib)
+
+# === Link libraries ===
+target_link_libraries(FileInSight PRIVATE zstd tlsh)
