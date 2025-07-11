@@ -4,11 +4,19 @@
 
 #ifndef SIMILARITYFINDER_H
 #define SIMILARITYFINDER_H
+#include <string>
+
+#include "AbstractFinder.h"
+#include "../models/FileInfo.h"
 
 
-
-class SimilarityFinder {
-
+class SimilarityFinder : public AbstractFinder{
+private:
+    std::vector<FileInfo> referenceFiles;
+    std::vector<FileInfo> files;
+public:
+    explicit SimilarityFinder(const std::string& referencePath, const std::string& searchPath);
+    std::vector<std::vector<FileInfo>> find() override;
 };
 
 

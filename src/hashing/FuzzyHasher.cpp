@@ -55,5 +55,32 @@ bool FuzzyHasher::areFilesSimilar(const FileInfo &file1, const FileInfo &file2, 
     return diff <= cutOff;
 }
 
+std::optional<std::vector<FileInfo> > FuzzyHasher::findSimilarities(const FileInfo &referenceFile, const std::vector<FileInfo> &files, const std::uint8_t& cutOff) {
+    //Instanciates Reference Obj
+    const std::string fuzzyhashReferenceFile = computeFuzzyHash(referenceFile);
+    Tlsh referenceObj;
+    if (referenceObj.fromTlshStr(fuzzyhashReferenceFile.c_str()) != 0) {
+        std::cerr << "[Error] Invalid TlSH Hash for Reference-File!\n";
+        return std::nullopt;
+    }
+    //Create resolution and loop through files
+    std::vector<FileInfo> matches;
+
+    for (const FileInfo &file : files) {
+        const std::string fuzzyhashFile = computeFuzzyHash(file);
+        Tlsh fileObj;
+        if (fileObj.fromTlshStr(fuzzyhashFile.c_str()) != 0) {
+            std::cerr << "[Error] Invalid Tlsh Hash for file!\n";
+            continue;
+        }
+        if (referenceObj.totalDiff(&fileObj) <= cutOff) {
+            matches.push_back(file);
+        }
+    }
+
+    return matches.empty() ? std::nullopt : matches;
+
+
+}
 
 
