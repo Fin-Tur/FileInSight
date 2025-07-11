@@ -219,4 +219,40 @@ void UI::start_compression() {
 
 }
 
+void UI::start_similaritySearch() {
+    //Collect Reference Path
+    std::cout << "Please enter reference-file(s) path: ";
+    std::string refPath;
+    std::cin >> refPath;
+
+    if (!std::filesystem::exists(refPath)) {
+        std::cout << "[Error] Reference path does not exist!\n";
+        return;
+    }
+    //Collect Search Path
+    std::cout << "Please enter path to look for similarities: ";
+    std::string searchPath;
+    std::cin >> searchPath;
+
+    if (!std::filesystem::exists(searchPath)) {
+        std::cout << "[Error] Search path does not exist!\n";
+        return;
+    }
+    //Find similarities
+    SimilarityFinder simFinder(refPath, searchPath);
+    std::vector<std::vector<FileInfo>> res = simFinder.find();
+
+    if (!res.empty()) {
+        std::cout << "\n[Info] Found similarities!\n";
+        for (auto& group : res) {
+            std::cout << "Similarities for file: " << group[0].path.string() << "\n";
+            for (auto& file : group) {
+                std::cout << "  -> Match: " << file.path.string() << "\n";
+            }
+        }
+    }else {
+        std::cout << "\n[Info] No similarities!\n";
+    }
+
+}
 

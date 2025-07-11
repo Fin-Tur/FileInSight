@@ -15,7 +15,7 @@ private:
     std::vector<FileInfo> referenceFiles;
     std::vector<FileInfo> files;
 public:
-    explicit SimilarityFinder(const std::string& referencePath, const std::string& searchPath);
+    SimilarityFinder(const std::string& referencePath, const std::string& searchPath);
     std::vector<std::vector<FileInfo>> find() override;
 };
 

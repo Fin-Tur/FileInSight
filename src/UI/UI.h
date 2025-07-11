@@ -5,6 +5,7 @@
 #include <iostream>
 #include "../finder/DuplicateFinder.h"
 #include "../core/FileCollecter.h"
+#include "../finder/SimilarityFinder.h"
 
 #ifndef UI_H
 #define UI_H
@@ -20,6 +21,7 @@ public:
     static void start_regexSearch();
     static void start_agingSearch();
     static void start_compression();
+    static void start_similaritySearch();
     static bool verifyPassword();
 
 private:
