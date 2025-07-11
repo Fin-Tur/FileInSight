@@ -38,6 +38,8 @@ add_executable(FileInSight
         src/hashing/FuzzyHasher.h
         src/finder/SimilarityFinder.cpp
         src/finder/SimilarityFinder.h
+        src/analyzer/MagicByteAnalyzer.cpp
+        src/analyzer/MagicByteAnalyzer.h
 )
 
 # === TLSH static lib ===

@@ -4,6 +4,8 @@
 
 #ifndef FILEINFO_H
 #define FILEINFO_H
+#include <cstdint>
+#include <filesystem>
 
 struct FileInfo {
     std::filesystem::path path;

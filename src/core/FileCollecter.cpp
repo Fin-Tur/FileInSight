@@ -7,6 +7,33 @@
 
 std::vector<FileInfo> FileCollector::collect(const std::string& path) {
     std::vector<FileInfo> files;
+
+    //Path is singular file
+    std::error_code ec;
+    std::filesystem::path inputPath(path);
+    if (std::filesystem::is_regular_file(inputPath, ec)) {
+        if (!isPathBlacklisted(path)) {
+            uintmax_t size = std::filesystem::file_size(inputPath, ec);
+            if (!ec) {
+                FileInfo info{ inputPath.string(), size, "", -1 };
+
+                std::error_code ec_time;
+                auto ftime = std::filesystem::last_write_time(inputPath, ec_time);
+                if (!ec_time) {
+                    using namespace std::chrono;
+                    auto now = std::filesystem::file_time_type::clock::now();
+                    auto age_days = duration_cast<days>(now - ftime).count();
+                    info.lastUsed = static_cast<int>(age_days);
+                }
+
+                files.emplace_back(info);
+            }
+        }
+
+        return files; // ← direkt zurückkehren, da kein Verzeichnis
+    }
+
+
     std::stack<std::filesystem::path> dirs;
     dirs.emplace(path);
 

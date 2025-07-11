@@ -19,9 +19,10 @@ bool UI::verifyPassword() {
 }
 
 void UI::start_ui() {
-
+    /*
     std::cout << "Please enter password to continue:\n";
     if (!verifyPassword()) return;
+    */
 
     //main-loop
 
@@ -32,7 +33,7 @@ void UI::start_ui() {
         std::cin.ignore(); std::cin.get();
         std::system("cls");
 
-        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A : Aged Search]\n[C : Compression]\n[E : Exit]\n";
+        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A : Aged Search]\n[C : Compression]\n[S : SimilaritySearch]\n[E : Exit]\n";
         std::string input;
         std::cin >> input;
         std::transform(input.begin(), input.end(), input.begin(), ::tolower);
@@ -44,6 +45,8 @@ void UI::start_ui() {
             start_agingSearch();
         }else if (input == "c") {
             start_compression();
+        }else if (input == "s") {
+            start_similaritySearch();
         }else if (input == "e"){
             break;
         }
@@ -246,6 +249,7 @@ void UI::start_similaritySearch() {
         std::cout << "\n[Info] Found similarities!\n";
         for (auto& group : res) {
             std::cout << "Similarities for file: " << group[0].path.string() << "\n";
+            group.erase(group.begin());
             for (auto& file : group) {
                 std::cout << "  -> Match: " << file.path.string() << "\n";
             }

@@ -20,7 +20,7 @@ std::string FuzzyHasher::computeFuzzyHash(const FileInfo &file) {
     //Check actual read size
     std::streamsize bytesRead = ifs.gcount();
     if (bytesRead < 50) {
-        std::cerr << "[Error] Fuzzy Hashing needs at least 50 bytes of data!" <<std::endl;
+        //std::cerr << "[Error] Fuzzy Hashing needs at least 50 bytes of data!" <<std::endl;
         return std::string("");
     }
     ifs.close();
@@ -67,18 +67,29 @@ std::optional<std::vector<FileInfo> > FuzzyHasher::findSimilarities(const FileIn
     std::vector<FileInfo> matches;
 
     for (const FileInfo &file : files) {
+        //Check if file is not refFile
+        if (std::filesystem::equivalent(file.path, referenceFile.path)) {
+            continue;
+        }
+
         const std::string fuzzyhashFile = computeFuzzyHash(file);
         Tlsh fileObj;
         if (fileObj.fromTlshStr(fuzzyhashFile.c_str()) != 0) {
-            std::cerr << "[Error] Invalid Tlsh Hash for file!\n";
+            //std::cerr << "[Error] Invalid Tlsh Hash for file!\n";
             continue;
         }
+        /*
+        std::cout << "Hash1: " << fuzzyhashReferenceFile << "\n";
+        std::cout << "Hash2: " <<  fuzzyhashFile << "\n";
+        std::cout << "Diff: " << referenceObj.totalDiff(&fileObj) << "\n";
+        */
         if (referenceObj.totalDiff(&fileObj) <= cutOff) {
             matches.push_back(file);
         }
     }
 
-    return matches.empty() ? std::nullopt : matches;
+    if (matches.empty()){ return std::nullopt;}
+    return matches;
 
 
 }
