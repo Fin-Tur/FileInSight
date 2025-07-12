@@ -91,7 +91,6 @@ std::vector<FileInfo> FileCollector::collect(const std::string& path) {
             }
         }
     }
-
     return files;
 }
 

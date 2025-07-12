@@ -6,6 +6,7 @@
 
 #include <algorithm>
 
+#include "../analyzer/MagicByteAnalyzer.h"
 #include "../compression/HuffmanCompressor.h"
 #include "../compression/zstdCompression.h"
 #include "../finder/AgingFileFinder.h"
@@ -33,7 +34,7 @@ void UI::start_ui() {
         std::cin.ignore(); std::cin.get();
         std::system("cls");
 
-        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A : Aged Search]\n[C : Compression]\n[S : SimilaritySearch]\n[E : Exit]\n";
+        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A : Aged Search]\n[C : Compression]\n[S : SimilaritySearch]\n[M : MagicByteAnalyzer]\n[E : Exit]\n";
         std::string input;
         std::cin >> input;
         std::transform(input.begin(), input.end(), input.begin(), ::tolower);
@@ -47,6 +48,8 @@ void UI::start_ui() {
             start_compression();
         }else if (input == "s") {
             start_similaritySearch();
+        }else if (input == "m"){
+            start_magicByteAnalyzer();
         }else if (input == "e"){
             break;
         }
@@ -258,5 +261,26 @@ void UI::start_similaritySearch() {
         std::cout << "\n[Info] No similarities!\n";
     }
 
+}
+
+void UI::start_magicByteAnalyzer() {
+    std::cout << "Please enter search path: ";
+    std::string searchPath;
+    std::cin >> searchPath;
+
+    if (!std::filesystem::exists(searchPath)) {
+        std::cout << "[Error] Search path does not exist!\n";
+    }
+
+    std::vector<std::pair<FileInfo, std::string>> flaggedFiles = MagicByteAnalyzer::analyzePath(searchPath);
+
+    if (flaggedFiles.empty()) {
+        std::cout << "\n[Info] No suspicious files found!\n";
+        return;
+    }
+    std::cout << "\n[Info] Found suspicious file/s!\n";
+    for (const auto& [file, extension] : flaggedFiles) {
+        std::cout << "  -> FlaggedFile: " << file.path.string() << " was flagged as a " << extension <<" file!\n";
+    }
 }
 

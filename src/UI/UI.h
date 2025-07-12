@@ -22,6 +22,7 @@ public:
     static void start_agingSearch();
     static void start_compression();
     static void start_similaritySearch();
+    static void start_magicByteAnalyzer();
     static bool verifyPassword();
 
 private:

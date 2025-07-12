@@ -5,6 +5,7 @@
 #ifndef MAGICBYTEANALYZER_H
 #define MAGICBYTEANALYZER_H
 
+#include <optional>
 #include <vector>
 
 #include "../models/FileInfo.h"
@@ -21,12 +22,14 @@ const std::vector<std::pair<std::string, std::string>> byteSignatures = {
 };
 
 class MagicByteAnalyzer {
-private:
-    std::vector<FileInfo> files;
-    std::vector<FileInfo> flaggedFiles;
+
 public:
-    explicit MagicByteAnalyzer(std::string& path);
-    void analyze();
+    //Analyze Path for flaggedFiles
+    static std::vector<std::pair<FileInfo, std::string>> analyzePath(const std::string& path);
+
+private:
+    //Analyze File
+    static std::optional<std::pair<FileInfo, std::string>> analyzeFile(const std::filesystem::path& path);
 };
 
 
