@@ -40,6 +40,8 @@ add_executable(FileInSight
         src/finder/SimilarityFinder.h
         src/analyzer/MagicByteAnalyzer.cpp
         src/analyzer/MagicByteAnalyzer.h
+        src/cli/CLIParser.cpp
+        src/cli/CLIParser.h
 )
 
 # === TLSH static lib ===

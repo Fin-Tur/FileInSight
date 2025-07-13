@@ -1,16 +1,27 @@
+#include <algorithm>
+
+#include "cli/CLIParser.h"
+#include "compression/zstdCompression.h"
 #include "UI/UI.h"
 
 #include "finder/DuplicateFinder.h"
 #include "core/FileCollecter.h"
 void testCompressionRoundtrip(const std::filesystem::path& inputFile);
 
-int main() {
+void printHelper() {
+    std::cout << "Wrong usage of commands! Usage: \nFileInSight -compress <path>\nFileInSight -decompress <path>";
+}
 
-    UI interface;
-    interface.start_ui();
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        UI interface;
+        interface.start_ui();
 
-    std::system("pause");
-
+        std::system("pause");
+        return 0;
+    }else {
+        return CLIParser::run(argc, argv);
+    }
 
     return 0;
 
