@@ -12,6 +12,7 @@
 #include "../finder/AgingFileFinder.h"
 #include "../hashing/picosha2.h"
 #include "../finder/RegExFinder.h"
+#include "../steganography/XOREncryptor.h"
 
 bool UI::verifyPassword() {
     std::string input;
@@ -34,7 +35,7 @@ void UI::start_ui() {
         std::cin.ignore(); std::cin.get();
         std::system("cls");
 
-        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A : Aged Search]\n[C : Compression]\n[S : SimilaritySearch]\n[M : MagicByteAnalyzer]\n[E : Exit]\n";
+        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A : Aged Search]\n[C : Compression]\n[S : SimilaritySearch]\n[M : MagicByteAnalyzer]\n[E : En/De-cryption]\n[Q : Quit]\n";
         std::string input;
         std::cin >> input;
         std::transform(input.begin(), input.end(), input.begin(), ::tolower);
@@ -48,9 +49,11 @@ void UI::start_ui() {
             start_compression();
         }else if (input == "s") {
             start_similaritySearch();
-        }else if (input == "m"){
+        }else if (input == "m") {
             start_magicByteAnalyzer();
         }else if (input == "e"){
+            start_cryption();
+        }else if (input == "q"){
             break;
         }
     }
@@ -283,4 +286,38 @@ void UI::start_magicByteAnalyzer() {
         std::cout << "  -> FlaggedFile: " << file.path.string() << " was flagged as a " << extension <<" file!\n";
     }
 }
+
+void UI::start_cryption() {
+    std::cout << "Please enter file path: ";
+    std::string searchPath;
+    std::cin >> searchPath;
+
+    if (!std::filesystem::exists(searchPath)) {
+        std::cout << "[Error] Search path does not exist!\n";
+        return;
+    }
+
+    std::cout << "Do you want to de or encrypt file? [D : Decryption], [E : Encryption]\n";
+    std::string answer;
+    std::cin >> answer;
+
+    std::cout << "Please enter password for de/en-cryption :";
+    std::string password;
+    std::cin >> password;
+
+
+    std::transform(answer.begin(), answer.end(), answer.begin(), ::tolower);
+
+    if (answer == "d") {
+        XOREncryptor::decrypt(searchPath, password);
+        std::cout << "\n[Info] Decryption succesfull!\n";
+    }else if (answer == "e") {
+        XOREncryptor::encrypt(searchPath, password);
+        std::cout << "\n[Info] Encryption succesfull!\n";
+    }else {
+        std::cout << "[Error] Invalid action!\n";
+    }
+
+}
+
 

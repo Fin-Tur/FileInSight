@@ -16,6 +16,7 @@
 #include "../finder/DuplicateFinder.h"
 #include "../finder/SimilarityFinder.h"
 #include "../finder/AgingFileFinder.h"
+#include "../steganography/XOREncryptor.h"
 
 
 void CLIParser::printHelp() {
@@ -26,7 +27,9 @@ void CLIParser::printHelp() {
             << "  FileInSight -define <path> : Analyzes Magic Bytes to ensure file format\n"
             << "  FileInSight -duplicates <path> : Finds duplicates\n"
             << "  FileInSight -similar <file> <path> : finds similar files to <file> in <path>\n"
-            << "  FileInSight -aging <path> <age cap> : finds files in <path>, last used more days ago then <age cap>\n";
+            << "  FileInSight -aging <path> <age cap> : finds files in <path>, last used more days ago then <age cap>\n"
+            << "  FileInSight -encrypt <file> <password> : Encrypts file\n"
+            << "  FileInSight -decrypt <file> <password> : Decrypts file\n";
 }
 
 
@@ -87,6 +90,22 @@ int CLIParser::run(int argc, char *argv[]) {
         { "-help", [](int, char*[]) -> int {
             CLIParser::printHelp();
             return 0;
+        }},
+        { "-encrypt", [](int argc, char* argv[]) -> int {
+          if (argc != 4) {
+              std::cerr << "[Error] Usage: -encrypt <path> <password>\n";
+              return 1;
+          }
+            std::string password = argv[3];
+            return CLIParser::handleXOREncrypt(argv[2], password);
+        }},
+        { "-decrypt", [](int argc, char* argv[]) -> int {
+            if (argc != 4) {
+                std::cerr << "[Error] Usage: -decrypt <path> <password>\n";
+                return 1;
+            }
+            std::string password = argv[3];
+            return CLIParser::handleXORDecrypt(argv[2], password);
         }}
     };
 
@@ -220,5 +239,19 @@ int CLIParser::handleAging(const std::string &path, int ageCap) {
     }
     return 0;
 }
+
+int CLIParser::handleXOREncrypt(const std::string &path, std::string &password) {
+    XOREncryptor::encrypt(path, password);
+    std::cout << "[Info ] Encryption succesfull!\n";
+    return 0;
+}
+
+int CLIParser::handleXORDecrypt(const std::string &path, std::string &password) {
+    XOREncryptor::decrypt(path, password);
+    std::cout << "[Info] Decryption succesfull!\n";
+    return 0;
+}
+
+
 
 

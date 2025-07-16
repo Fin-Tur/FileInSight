@@ -23,6 +23,7 @@ public:
     static void start_compression();
     static void start_similaritySearch();
     static void start_magicByteAnalyzer();
+    static void start_cryption();
     static bool verifyPassword();
 
 private:
