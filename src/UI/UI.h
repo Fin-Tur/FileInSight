@@ -26,12 +26,14 @@ public:
     static void start_cryption();
     static bool verifyPassword();
 
+    static std::intmax_t bytesToKB(std::intmax_t bytes){return bytes/1024;}
+    static std::intmax_t bytesToMB(std::intmax_t bytes){return (bytes/1024)/1024;}
+
 private:
     long duplicateDataAmount = 0;
     long freedMemory = 0;
 
-    static std::intmax_t bytesToKB(std::intmax_t bytes){return bytes/1024;}
-    static std::intmax_t bytesToMB(std::intmax_t bytes){return (bytes/1024)/1024;}
+
 };
 
 

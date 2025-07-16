@@ -44,6 +44,8 @@ add_executable(FileInSight
         src/cli/CLIParser.h
         src/steganography/XOREncryptor.cpp
         src/steganography/XOREncryptor.h
+        src/analyzer/PathAnalyzer.cpp
+        src/analyzer/PathAnalyzer.h
 )
 
 # === TLSH static lib ===
