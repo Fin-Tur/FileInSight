@@ -24,6 +24,7 @@ private:
     static int handleAging(const std::string& path, int ageCap);
     static int handleXOREncrypt(const std::string& path, std::string& password);
     static int handleXORDecrypt(const std::string& path, std::string& password);
+    static int handleEntropy(const std::string& path);
 };
 
 

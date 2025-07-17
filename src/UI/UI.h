@@ -24,6 +24,7 @@ public:
     static void start_similaritySearch();
     static void start_magicByteAnalyzer();
     static void start_cryption();
+    static void start_entropy();
     static bool verifyPassword();
 
     static std::intmax_t bytesToKB(std::intmax_t bytes){return bytes/1024;}

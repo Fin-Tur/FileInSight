@@ -9,6 +9,8 @@
 #include <iostream>
 #include <vector>
 #include <bits/ostream.tcc>
+
+#include "../analyzer/EntropyAnalyzer.h"
 #include "../compression/zstdCompression.h"
 #include "../finder/RegExFinder.h"
 #include "../models/FileInfo.h"
@@ -29,7 +31,8 @@ void CLIParser::printHelp() {
             << "  FileInSight -similar <file> <path> : finds similar files to <file> in <path>\n"
             << "  FileInSight -aging <path> <age cap> : finds files in <path>, last used more days ago then <age cap>\n"
             << "  FileInSight -encrypt <file> <password> : Encrypts file\n"
-            << "  FileInSight -decrypt <file> <password> : Decrypts file\n";
+            << "  FileInSight -decrypt <file> <password> : Decrypts file\n"
+            << "  FileInSight -entropy <file> : Displays Shannon Entropy\n";
 }
 
 
@@ -106,6 +109,13 @@ int CLIParser::run(int argc, char *argv[]) {
             }
             std::string password = argv[3];
             return CLIParser::handleXORDecrypt(argv[2], password);
+        }},
+        { "-entropy", [](int argc, char* argv[]) -> int {
+            if (argc != 3) {
+                std::cerr << "[Error] Usage: -entropy <file>\n";
+                return 1;
+            }
+            return CLIParser::handleEntropy(argv[2]);
         }}
     };
 
@@ -242,13 +252,19 @@ int CLIParser::handleAging(const std::string &path, int ageCap) {
 
 int CLIParser::handleXOREncrypt(const std::string &path, std::string &password) {
     XOREncryptor::encrypt(path, password);
-    std::cout << "[Info ] Encryption succesfull!\n";
+    std::cout << "[Info] Encryption succesfull!\n";
     return 0;
 }
 
 int CLIParser::handleXORDecrypt(const std::string &path, std::string &password) {
     XOREncryptor::decrypt(path, password);
     std::cout << "[Info] Decryption succesfull!\n";
+    return 0;
+}
+
+int CLIParser::handleEntropy(const std::string &path) {
+    const double entropy = EntropyAnalyzer::analyze(path);
+    std::cout << "[Info] Entropy of file: " << path << "is ->" << entropy << "bits/byte !\n";
     return 0;
 }
 

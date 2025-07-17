@@ -13,6 +13,7 @@
 #include "../hashing/picosha2.h"
 #include "../finder/RegExFinder.h"
 #include "../steganography/XOREncryptor.h"
+#include "../analyzer/EntropyAnalyzer.h"
 
 bool UI::verifyPassword() {
     std::string input;
@@ -35,7 +36,7 @@ void UI::start_ui() {
         std::cin.ignore(); std::cin.get();
         std::system("cls");
 
-        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A : Aged Search]\n[C : Compression]\n[S : SimilaritySearch]\n[M : MagicByteAnalyzer]\n[E : En/De-cryption]\n[Q : Quit]\n";
+        std::cout << "\nWhich Program would you like to run? \n[D : DuplicateSearch]\n[R : RegEx Search]\n[A : Aged Search]\n[C : Compression]\n[S : SimilaritySearch]\n[M : MagicByteAnalyzer]\n[E : En/De-cryption]\n[T : Entropy]\n[Q : Quit]\n";
         std::string input;
         std::cin >> input;
         std::transform(input.begin(), input.end(), input.begin(), ::tolower);
@@ -51,8 +52,10 @@ void UI::start_ui() {
             start_similaritySearch();
         }else if (input == "m") {
             start_magicByteAnalyzer();
-        }else if (input == "e"){
+        }else if (input == "e") {
             start_cryption();
+        }else if (input == "t"){
+            start_entropy();
         }else if (input == "q"){
             break;
         }
@@ -321,3 +324,15 @@ void UI::start_cryption() {
 }
 
 
+void UI::start_entropy() {
+    std::cout << "Please enter file path: ";
+    std::string searchPath;
+    std::cin >> searchPath;
+
+    if (!std::filesystem::exists(searchPath)) {
+        std::cout << "[Error] Search path does not exist!\n";
+        return;
+    }
+    const double entropy = EntropyAnalyzer::analyze(searchPath);
+    std::cout << "[Info] Entropy of file: " << searchPath << " is ->" << entropy << "bits/byte !\n";
+}
