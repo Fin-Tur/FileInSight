@@ -27,7 +27,7 @@ void PathAnalyzer::analyze() {
 void PathAnalyzer::printAnalytics() const {
     std::cout << "[Info] Analytics for " << this->path.string() <<"\n";
     std::cout << "  -> Number of files: " << this->files.size() << "\n";
-    std::cout << "  -> Total Memory allocated: " << this->fullSize << "\n";
+    std::cout << "  -> Total Memory allocated: " << UI::bytesToKB(this->fullSize) << "KB\n";
     std::cout << "  -> Average file size: " << this->averageFileSize << "\n";
     std::cout << "  -> Subfolder memory occupation: \n";
     for (auto& [subdir, size] : this->subfolderSizes) {
