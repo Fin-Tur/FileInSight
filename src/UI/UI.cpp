@@ -336,3 +336,15 @@ void UI::start_entropy() {
     const double entropy = EntropyAnalyzer::analyze(searchPath);
     std::cout << "[Info] Entropy of file: " << searchPath << " is ->" << entropy << "bits/byte !\n";
 }
+
+std::string UI::convertBytes(std::size_t bytes) {
+    if (bytes < 1024) {
+        return std::to_string(bytes) + " bytes";
+    }else if (bytes < 1024 * 1024) {
+        return std::to_string(bytes/1024) + "KB";
+    }else if (bytes < 1024 * 1024 * 1024) {
+        return std::to_string(bytes / (1024 * 1024)) + "MB";
+    }else {
+        return std::to_string(bytes/(1024 * 1024 * 1024)) + "GB";
+    }
+}

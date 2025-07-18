@@ -10,7 +10,7 @@
 
 bool zstdCompressor::compress(const std::filesystem::path& src, const std::filesystem::path& dst) {
     //Define compressionLevel (1-22)
-    int compressionLevel = 10;
+    int compressionLevel = 18;
 
     // Read the input file into a buffer
     std::ifstream ifs(src, std::ios::binary);
@@ -82,7 +82,7 @@ bool zstdCompressor::decompress(const std::filesystem::path& src, const std::fil
         return false;
     }
 
-    // Write the decompressed data to the output file
+    //Write the decompressed data to the output file
     std::ofstream ofs(dst, std::ios::binary);
     if (!ofs) {
         std::cerr << "Error opening output file!\n";

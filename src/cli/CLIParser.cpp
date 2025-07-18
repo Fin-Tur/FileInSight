@@ -19,6 +19,8 @@
 #include "../finder/SimilarityFinder.h"
 #include "../finder/AgingFileFinder.h"
 #include "../steganography/XOREncryptor.h"
+#include "../analyzer/FileAnalyzer.h"
+#include "../analyzer/PathAnalyzer.h"
 
 
 void CLIParser::printHelp() {
@@ -32,7 +34,9 @@ void CLIParser::printHelp() {
             << "  FileInSight -aging <path> <age cap> : finds files in <path>, last used more days ago then <age cap>\n"
             << "  FileInSight -encrypt <file> <password> : Encrypts file\n"
             << "  FileInSight -decrypt <file> <password> : Decrypts file\n"
-            << "  FileInSight -entropy <file> : Displays Shannon Entropy\n";
+            << "  FileInSight -entropy <file> : Displays Shannon Entropy\n"
+            << "  FileInSight -info <file> : Displays File info\n"
+            << "  FileInSight -path <path> : Displays Path info\n";
 }
 
 
@@ -116,19 +120,27 @@ int CLIParser::run(int argc, char *argv[]) {
                 return 1;
             }
             return CLIParser::handleEntropy(argv[2]);
+        }},
+        { "-info", [](int argc, char* argv[]) -> int {
+            if (argc != 3) {
+                std::cerr << "[Error] Usage: -info <file>\n";
+                return 1;
+            }
+            return CLIParser::handleFileInfo(argv[2]);
+        }},
+        {"-path", [](int argc, char* argv[]) -> int {
+            if (argc != 3) {
+                std::cerr << "[Error] Usage: -path <path>\n";
+                return 1;
+            }
+            return CLIParser::handlePathInfo(argv[2]);
         }}
+
     };
 
     //Check for valid Command
     std::string command = argv[1];
     std::transform(command.begin(), command.end(), command.begin(), ::tolower);
-
-    //Check for valid path
-    std::string path = argv[2];
-    if (!std::filesystem::exists(path)) {
-        std::cout << "\n[Error] Path does not exist!\n";
-        return 1;
-    }
 
     if (dispatchMap.contains(command)) {
         return dispatchMap.at(command)(argc, argv);  // Run matching lambda
@@ -268,6 +280,17 @@ int CLIParser::handleEntropy(const std::string &path) {
     return 0;
 }
 
+int CLIParser::handleFileInfo(const std::string &path) {
+    FileAnalyzer::analyze(path);
+    return 0;
+}
+
+int CLIParser::handlePathInfo(const std::string &path) {
+    PathAnalyzer analyzer(path);
+    analyzer.analyze();
+    analyzer.printAnalytics();
+    return 0;
+}
 
 
 

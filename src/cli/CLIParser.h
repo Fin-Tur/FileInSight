@@ -25,6 +25,8 @@ private:
     static int handleXOREncrypt(const std::string& path, std::string& password);
     static int handleXORDecrypt(const std::string& path, std::string& password);
     static int handleEntropy(const std::string& path);
+    static int handleFileInfo(const std::string& path);
+    static int handlePathInfo(const std::string& path);
 };
 
 

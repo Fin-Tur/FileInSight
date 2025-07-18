@@ -3,6 +3,9 @@
 //
 
 #include "PathAnalyzer.h"
+
+#include <algorithm>
+
 #include "../UI/UI.h"
 #include <iostream>
 
@@ -25,16 +28,22 @@ void PathAnalyzer::analyze() {
 }
 
 void PathAnalyzer::printAnalytics() const {
-    std::cout << "[Info] Analytics for " << this->path.string() <<"\n";
+
+    std::vector<std::pair<std::filesystem::path, size_t>> sortedFileTypSizes(this->fileTypeSizes.begin(), this->fileTypeSizes.end());
+    std::sort(sortedFileTypSizes.begin(), sortedFileTypSizes.end(), [](const auto& a, const auto& b) {
+        return a.second > b.second;
+    });
+
+    std::cout << "\n[Info] Analytics for " << this->path.string() <<"\n";
     std::cout << "  -> Number of files: " << this->files.size() << "\n";
-    std::cout << "  -> Total Memory allocated: " << UI::bytesToKB(this->fullSize) << "KB\n";
-    std::cout << "  -> Average file size: " << this->averageFileSize << "\n";
+    std::cout << "  -> Total Memory allocated: " << UI::convertBytes(this->fullSize) << "\n";
+    std::cout << "  -> Average file size: " << UI::convertBytes(this->averageFileSize) << "\n";
     std::cout << "  -> Subfolder memory occupation: \n";
     for (auto& [subdir, size] : this->subfolderSizes) {
-        std::cout << "   -> Subfolder " << subdir << " size: " << UI::bytesToKB(size) << "KB\n";
+        std::cout << "   -> Subfolder " << subdir << " size: " << UI::convertBytes(size) << "\n";
     }
     std::cout << "  -> Memory occupation by file types:\n";
-    for (auto& [filetype, size] : this->fileTypeSizes) {
-        std::cout << "    -> File type: " << filetype << " size:" << UI::bytesToKB(size) << "KB\n";
+    for (auto& [filetype, size] : sortedFileTypSizes) {
+        std::cout << "    -> File type: " << filetype << " size:" << UI::convertBytes(size) << "\n";
     }
 }

@@ -27,6 +27,7 @@ public:
     static void start_entropy();
     static bool verifyPassword();
 
+    static std::string convertBytes(std::size_t bytes);
     static std::intmax_t bytesToKB(std::intmax_t bytes){return bytes/1024;}
     static std::intmax_t bytesToMB(std::intmax_t bytes){return (bytes/1024)/1024;}
 

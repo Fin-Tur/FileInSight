@@ -6,6 +6,8 @@
 #include <chrono>
 
 std::vector<FileInfo> FileCollector::collect(const std::string& path) {
+    std::cout << "[Info] Collecting files...\n";
+
     std::vector<FileInfo> files;
 
     //Path is singular file
@@ -30,7 +32,7 @@ std::vector<FileInfo> FileCollector::collect(const std::string& path) {
             }
         }
 
-        return files; // ← direkt zurückkehren, da kein Verzeichnis
+        return files; //return immediatly since singular file
     }
 
 
@@ -52,18 +54,18 @@ std::vector<FileInfo> FileCollector::collect(const std::string& path) {
         for (const auto& entry : dir_it) {
             std::error_code entry_ec;
 
-            // Push Directorys on stack
+            //Push Directorys on stack
             if (entry.is_directory(entry_ec)) {
                 if (!entry_ec) dirs.push(entry.path());
                 continue;
             }
 
-            // Only work with regular files
+            //Only work with regular files
             if (!entry.is_regular_file(entry_ec) || entry_ec)
                 continue;
 
             const auto& pathCurr = entry.path();
-            // Skip virtual files
+            //Skip virtual files
             if (pathCurr.filename().string().starts_with("."))
                 continue;
 
@@ -85,9 +87,11 @@ std::vector<FileInfo> FileCollector::collect(const std::string& path) {
 
                 files.emplace_back(info);
 
-                std::cout << "[OK] " << pathCurr
+                /*std::cout << "[OK] " << pathCurr
                           << " (" << size << " Bytes, ~"
                           << info.lastUsed << " days old)\n";
+                          */
+                std::cout << "[Info] Collection succesful!\n";
             }
         }
     }
@@ -102,7 +106,7 @@ bool FileCollector::isPathBlacklisted(const std::string& pathStr) {
         std::filesystem::path blPath = std::filesystem::absolute(blStr);
         blPath = blPath.lexically_normal();
 
-        // Check if Path is blacklisted
+        //Check if Path is blacklisted
         if (std::mismatch(blPath.begin(), blPath.end(), path.begin()).first == blPath.end()) {
             return true;
         }

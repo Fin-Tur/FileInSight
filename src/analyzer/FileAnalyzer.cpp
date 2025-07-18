@@ -5,15 +5,12 @@
 #include <filesystem>
 #include <iostream>
 
+#include "FileAnalyzer.h"
 #include "EntropyAnalyzer.h"
 #include "MagicByteAnalyzer.h"
 #include "../core/FileCollecter.h"
 #include "../UI/UI.h"
 
-class FileAnalyzer {
-public:
-    static void analyze(const std::string& src);
-};
 
 void FileAnalyzer::analyze(const std::string& src) {
     //gather File(Info)
@@ -26,6 +23,8 @@ void FileAnalyzer::analyze(const std::string& src) {
 
     FileInfo file = FileCollector::collect(src)[0];
     //Gather Information
+    file.size = std::filesystem::file_size(src);
+
     file.entropy = EntropyAnalyzer::analyze(src);
     long actualInformationSize = (file.entropy/8) * file.size;
 
@@ -40,7 +39,7 @@ void FileAnalyzer::analyze(const std::string& src) {
         std::cout << "    -> Flagged as: " << byteFlag->second << "\n";
     }
     std::cout << "  -> Entropy: " << file.entropy << "\n";
-    std::cout << "  -> Actual Amount of information: " << UI::bytesToKB(actualInformationSize) << "\n";
+    std::cout << "  -> Actual Amount of information: " << UI::bytesToKB(actualInformationSize) << "KB\n";
     if (file.entropy < 6.5) {
         std::cout << "    -> Could free memory with compression!\n";
     }else if (file.entropy > 7.8) {
