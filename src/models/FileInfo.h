@@ -12,6 +12,7 @@ struct FileInfo {
     std::uintmax_t size;
     std::string hash;
     int lastUsed = -1; // in days
+    double entropy = -1;
 };
 
 #endif //FILEINFO_H

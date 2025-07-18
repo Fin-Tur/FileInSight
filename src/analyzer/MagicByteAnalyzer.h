@@ -26,10 +26,9 @@ class MagicByteAnalyzer {
 public:
     //Analyze Path for flaggedFiles
     static std::vector<std::pair<FileInfo, std::string>> analyzePath(const std::string& path);
-
-private:
     //Analyze File
     static std::optional<std::pair<FileInfo, std::string>> analyzeFile(const std::filesystem::path& path);
+
 };
 
 
