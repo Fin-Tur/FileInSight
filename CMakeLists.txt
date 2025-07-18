@@ -51,6 +51,9 @@ add_executable(FileInSight
         src/tests/TestEncryption.cpp
         src/analyzer/FileAnalyzer.cpp
         src/analyzer/FileAnalyzer.h
+        src/steganography/forensics/RawRecoveryScanner.cpp
+        src/steganography/forensics/RawRecoveryScanner.h
+        src/models/FileSignature.h
 )
 
 # === TLSH static lib ===
