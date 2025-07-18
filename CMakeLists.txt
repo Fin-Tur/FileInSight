@@ -48,6 +48,7 @@ add_executable(FileInSight
         src/analyzer/PathAnalyzer.h
         src/analyzer/EntropyAnalyzer.cpp
         src/analyzer/EntropyAnalyzer.h
+        src/tests/TestEncryption.cpp
 )
 
 # === TLSH static lib ===
