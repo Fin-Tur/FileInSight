@@ -54,6 +54,8 @@ add_executable(FileInSight
         src/steganography/forensics/RawRecoveryScanner.cpp
         src/steganography/forensics/RawRecoveryScanner.h
         src/models/FileSignature.h
+        src/models/RecoveredFile.h
+        src/tests/TestRecovery.cpp
 )
 
 # === TLSH static lib ===

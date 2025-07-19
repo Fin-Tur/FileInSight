@@ -6,6 +6,8 @@
 
 #include "finder/DuplicateFinder.h"
 #include "core/FileCollecter.h"
+
+void testRecovery();
 void testCompressionRoundtrip(const std::filesystem::path& inputFile);
 
 void printHelper() {
@@ -14,7 +16,7 @@ void printHelper() {
 
 int main(int argc, char* argv[]) {
 
-    if (argc < 2) {
+    /*if (argc < 2) {
         UI interface;
         interface.start_ui();
 
@@ -25,7 +27,9 @@ int main(int argc, char* argv[]) {
 
         return CLIParser::run(argc, argv);
 
-    }
+    }*/
+
+    testRecovery();
 
     return 0;
 
