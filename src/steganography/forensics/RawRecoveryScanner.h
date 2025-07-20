@@ -8,7 +8,7 @@
 #include "../../models/FileSignature.h"
 #include "../../models/RecoveredFile.h"
 
-const std::vector<FileSignature> knownSignatures = {
+inline std::vector<FileSignature> knownSignatures = {
     // JPEG
     {{0xFF, 0xD8}, {0xFF, 0xD9}, "jpeg"},
 
@@ -51,11 +51,12 @@ const std::vector<FileSignature> knownSignatures = {
 
 class RawRecoveryScanner {
 public:
-    RawRecoveryScanner() = default;
+    RawRecoveryScanner(const bool& enable_UTF16LE);
     void scan(std::ifstream& ifs);
-    void extractFiles(std::ifstream& ifs) const;
+    void extractFiles(std::ifstream& ifs, const std::string& outputDir) const;
+    static void addUTF16LESignatures();
 private:
-    const int maxWindowLength = 8;
+    const int maxWindowLength = 16;
     std::vector<RecoveredFile> extractedFiles;
 };
 

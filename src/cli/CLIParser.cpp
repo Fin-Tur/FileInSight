@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <bits/ostream.tcc>
+#include <fstream>
 
 #include "../analyzer/EntropyAnalyzer.h"
 #include "../compression/zstdCompression.h"
@@ -21,6 +22,7 @@
 #include "../steganography/XOREncryptor.h"
 #include "../analyzer/FileAnalyzer.h"
 #include "../analyzer/PathAnalyzer.h"
+#include "../steganography/forensics/RawRecoveryScanner.h"
 
 
 void CLIParser::printHelp() {
@@ -36,7 +38,8 @@ void CLIParser::printHelp() {
             << "  FileInSight -decrypt <file> <password> : Decrypts file\n"
             << "  FileInSight -entropy <file> : Displays Shannon Entropy\n"
             << "  FileInSight -info <file> : Displays File info\n"
-            << "  FileInSight -path <path> : Displays Path info\n";
+            << "  FileInSight -path <path> : Displays Path info\n"
+            << "  FileInSight -recover <raw dump> : Recovers files from Raw dump\n";
 }
 
 
@@ -134,6 +137,13 @@ int CLIParser::run(int argc, char *argv[]) {
                 return 1;
             }
             return CLIParser::handlePathInfo(argv[2]);
+        }},
+        {"-recover", [](int argc, char* argv[]) -> int {
+            if (argc != 3) {
+                std::cerr << "[Error] Usage: -recover <raw dump>\n";
+                return 1;
+            }
+            return CLIParser::handleRecovery(argv[2]);
         }}
 
     };
@@ -289,6 +299,19 @@ int CLIParser::handlePathInfo(const std::string &path) {
     PathAnalyzer analyzer(path);
     analyzer.analyze();
     analyzer.printAnalytics();
+    return 0;
+}
+
+int CLIParser::handleRecovery(const std::string &path) {
+    if (!std::filesystem::exists(path)) {
+        std::cerr << "[Error] File not found!\n";
+    }
+
+    std::ifstream ifs(path, std::ios::binary);
+    RawRecoveryScanner scanner(false);
+    scanner.scan(ifs);
+    scanner.extractFiles(ifs, "recovered");
+    ifs.close();
     return 0;
 }
 

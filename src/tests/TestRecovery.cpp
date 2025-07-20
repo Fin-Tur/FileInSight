@@ -13,26 +13,30 @@
 void testRecovery() {
     //Create dummy file
     std::ofstream ofs("testraw.bin", std::ios::binary);
-    std::vector<uint8_t> pngHeader = {0x89, 'P', 'N', 'G', 0x0D, 0x0A, 0x1A, 0x0A};
+    std::vector<uint8_t> jpegHeader = {0xFF, 0xD8};
     std::vector<uint8_t> dummy(100, 0xAB);  // Dummy-Daten
-    std::vector<uint8_t> pngFooter = {0x00, 0x00, 0x00, 0x00, 'I', 'E', 'N', 'D'};
+    std::vector<uint8_t> jpegFooter = {0xFF, 0xD9};
 
-    ofs.write(reinterpret_cast<char*>(pngHeader.data()), pngHeader.size());
+
+    //ofs.write(reinterpret_cast<char*>(dummy.data()), dummy.size());
     ofs.write(reinterpret_cast<char*>(dummy.data()), dummy.size());
-    ofs.write(reinterpret_cast<char*>(pngFooter.data()), pngFooter.size());
+    ofs.write(reinterpret_cast<char*>(jpegHeader.data()), jpegHeader.size());
+    ofs.write(reinterpret_cast<char*>(dummy.data()), dummy.size());
+    ofs.write(reinterpret_cast<char*>(jpegFooter.data()), jpegFooter.size());
+    ofs.write(reinterpret_cast<char*>(dummy.data()), dummy.size());
     ofs.close();
 
     //Try to extract lost file
     std::ifstream ifs("testraw.bin", std::ios::binary);
-    RawRecoveryScanner scanner;
+    RawRecoveryScanner scanner(false);
     scanner.scan(ifs);
 
     // Wichtig: Danach zurückspulen, um mit demselben Stream extrahieren zu können
     ifs.clear();
     ifs.seekg(0);
-    scanner.extractFiles(ifs);
+    scanner.extractFiles(ifs, "recovered");
 
-    if (std::filesystem::exists("/recovered/extracted_file-1.png")) {
+    if (std::filesystem::exists("extracted_file_1.jpeg")) {
         std::cout << "[Info] Test succesful!\n";
     }else {
         std::cout << "[Info] Test failed!\n";
