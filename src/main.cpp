@@ -7,8 +7,6 @@
 #include "finder/DuplicateFinder.h"
 #include "core/FileCollecter.h"
 
-void testRecovery();
-void testCompressionRoundtrip(const std::filesystem::path& inputFile);
 
 
 int main(int argc, char* argv[]) {

@@ -4,11 +4,13 @@
 
 #include <fstream>
 #include <iostream>
+#include "../thirdparty/testing/catch_amalgamated.hpp"
 
 #include "../steganography/XOREncryptor.h"
 
-void testEncryptionRoundtrip(const std::filesystem::path& src= "testFile.txt") {
+TEST_CASE("XOR En/De-cryption test succesful", "[encryption]") {
     //create testfile
+    const std::filesystem::path src= "testFile.txt";
     if (src == "testFile.txt") {
         std::ofstream createTestFile("testFile.txt");
         std::string testData = "test123blablablaabcdefghijklmnopqrstuvw\nwasmacheichhier";
@@ -59,11 +61,10 @@ void testEncryptionRoundtrip(const std::filesystem::path& src= "testFile.txt") {
         encryptedBuffer.begin() + 16 //skipping Salt
     );
 
-    if (encrypted && decryptedCorrectly) {
-        std::cout << "[Info] Test Succesfull!\n";
-    }else {
-        std::cout << "[Info] Test Failed!\n";
-    }
+    std::filesystem::remove(src);
+
+    REQUIRE(encrypted);
+    REQUIRE(decryptedCorrectly);
 
 
 

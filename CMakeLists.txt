@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.16)
 project(FileInSight)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -31,7 +31,6 @@ add_executable(FileInSight
         src/compression/HuffmanTree.h
         src/compression/zstdCompression.cpp
         src/compression/zstdCompression.h
-        src/tests/TestCompression.cpp
         src/compression/AbstractCompressor.h
         src/hashing/FuzzyHasher.cpp
         src/hashing/FuzzyHasher.h
@@ -47,15 +46,66 @@ add_executable(FileInSight
         src/analyzer/PathAnalyzer.h
         src/analyzer/EntropyAnalyzer.cpp
         src/analyzer/EntropyAnalyzer.h
-        src/tests/TestEncryption.cpp
         src/analyzer/FileAnalyzer.cpp
         src/analyzer/FileAnalyzer.h
         src/steganography/forensics/RawRecoveryScanner.cpp
         src/steganography/forensics/RawRecoveryScanner.h
         src/models/FileSignature.h
         src/models/RecoveredFile.h
-        src/tests/TestRecovery.cpp
+        src/UI/UI.cpp
 )
+
+#Test Target
+add_executable(test_runner
+        src/tests/test_main.cpp
+        src/tests/TestEncryption.cpp
+        src/tests/TestRecovery.cpp
+        src/tests/TestCompression.cpp
+        src/core/FileCollecter.cpp
+        src/core/FileCollecter.h
+        src/finder/DuplicateFinder.cpp
+        src/finder/DuplicateFinder.h
+        src/hashing/Hasher.cpp
+        src/hashing/Hasher.h
+        src/hashing/picosha2.h
+        src/UI/UI.h
+        src/finder/RegExFinder.cpp
+        src/finder/RegExFinder.h
+        src/finder/AbstractFinder.h
+        src/finder/AgingFileFinder.cpp
+        src/finder/AgingFileFinder.h
+        src/models/FileInfo.h
+        src/compression/HuffmanCompressor.cpp
+        src/compression/HuffmanCompressor.h
+        src/compression/HuffmanTree.cpp
+        src/compression/HuffmanTree.h
+        src/compression/zstdCompression.cpp
+        src/compression/zstdCompression.h
+        src/compression/AbstractCompressor.h
+        src/hashing/FuzzyHasher.cpp
+        src/hashing/FuzzyHasher.h
+        src/finder/SimilarityFinder.cpp
+        src/finder/SimilarityFinder.h
+        src/analyzer/MagicByteAnalyzer.cpp
+        src/analyzer/MagicByteAnalyzer.h
+        src/cli/CLIParser.cpp
+        src/cli/CLIParser.h
+        src/steganography/XOREncryptor.cpp
+        src/steganography/XOREncryptor.h
+        src/analyzer/PathAnalyzer.cpp
+        src/analyzer/PathAnalyzer.h
+        src/analyzer/EntropyAnalyzer.cpp
+        src/analyzer/EntropyAnalyzer.h
+        src/analyzer/FileAnalyzer.cpp
+        src/analyzer/FileAnalyzer.h
+        src/steganography/forensics/RawRecoveryScanner.cpp
+        src/steganography/forensics/RawRecoveryScanner.h
+        src/models/FileSignature.h
+        src/models/RecoveredFile.h
+        src/UI/UI.cpp
+)
+
+target_include_directories(test_runner PRIVATE src external)
 
 # === TLSH static lib ===
 add_library(tlsh STATIC
@@ -69,3 +119,4 @@ target_include_directories(FileInSight PRIVATE src/thirdparty/fuzzyhashLib)
 
 # === Link libraries ===
 target_link_libraries(FileInSight PRIVATE zstd tlsh)
+target_link_libraries(test_runner PRIVATE zstd tlsh)

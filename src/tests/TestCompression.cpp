@@ -2,43 +2,58 @@
 // Created by Admin on 07.07.2025.
 //
 #include "../compression/HuffmanCompressor.h"
+#include "../thirdparty/testing/catch_amalgamated.hpp"
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 
-void testCompressionRoundtrip(const std::filesystem::path& inputFile) {
-    HuffmanCompressor compressor;
+TEST_CASE("HuffmanCompression test successfull!", "[compression]"){
+    //Create files
+    std::filesystem::path inputFile = "testCompression.bin";
+    std::filesystem::path compressedFile = "temp_compressed.huff";
+    std::filesystem::path decompressedFile = "temp_decompressed.txt";
+    //Write testfile
+    std::ofstream ofs(inputFile, std::ios::binary);
+    std::vector<uint8_t> dummy(100, 0xAB);  // Dummy-Daten
+    ofs.write(reinterpret_cast<char*>(&dummy), sizeof(dummy));
+    ofs.close();
 
-    std::filesystem::path compressedFile = "C:/Users/Admin/OneDrive/Desktop/temp_compressed.huff";
-    std::filesystem::path decompressedFile = "C:/Users/Admin/OneDrive/Desktop/temp_decompressed.txt";
+    //Handle Compressor
+    HuffmanCompressor compressor;
 
     compressor.compress(inputFile, compressedFile);
     compressor.decompress(compressedFile, decompressedFile);
 
-    // Vergleich der Dateien
+    //Check similarity
     std::ifstream original(inputFile, std::ios::binary);
     std::ifstream decompressed(decompressedFile, std::ios::binary);
 
-    if (!original || !decompressed) {
-        std::cerr << "Fehler beim Öffnen der Dateien für den Vergleich." << std::endl;
-        return;
-    }
+    original.seekg(0, std::ios::end);
+    size_t originalSize = original.tellg();
+    original.seekg(0, std::ios::beg);
 
-    char ch1, ch2;
-    int position = 0;
-    while (original.get(ch1) && decompressed.get(ch2)) {
-        if (ch1 != ch2) {
-            std::cerr << "Fehler: Unterschied an Byte " << position << ": "
-                      << (int)(unsigned char)ch1 << " != " << (int)(unsigned char)ch2 << std::endl;
-            return;
-        }
-        position++;
-    }
+    decompressed.seekg(0, std::ios::end);
+    size_t decompressedSize = decompressed.tellg();
+    decompressed.seekg(0, std::ios::beg);
 
-    if (original.get(ch1) || decompressed.get(ch2)) {
-        std::cerr << "Fehler: Dateigrößen stimmen nicht überein." << std::endl;
-        return;
-    }
+    std::vector<uint8_t> originalBuffer(originalSize);
+    original.read(reinterpret_cast<char*>(originalBuffer.data()), originalBuffer.size());
+    original.close();
 
-    std::cout << "✅ Test erfolgreich: Komprimierte und dekomprimierte Datei sind identisch!" << std::endl;
+    std::vector<uint8_t> decompressedBuffer(decompressedSize);
+    decompressed.read(reinterpret_cast<char*>(decompressedBuffer.data()), decompressedBuffer.size());
+    decompressed.close();
+
+    original.close();
+    decompressed.close();
+
+    REQUIRE(originalSize == decompressedSize);
+    REQUIRE(std::equal(originalBuffer.begin(), originalBuffer.end(), decompressedBuffer.begin()));
+
+    //CleanUp
+    std::filesystem::remove(compressedFile);
+    std::filesystem::remove(decompressedFile);
+    std::filesystem::remove(inputFile);
+
+
 }

@@ -7,10 +7,11 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include "../thirdparty/testing/catch_amalgamated.hpp"
 
 #include "../steganography/forensics/RawRecoveryScanner.h"
 
-void testRecovery() {
+TEST_CASE("Recovery test succesfull!", "[revocery]"){
     //Create dummy file
     std::ofstream ofs("testraw.bin", std::ios::binary);
     std::vector<uint8_t> jpegHeader = {0xFF, 0xD8};
@@ -36,9 +37,8 @@ void testRecovery() {
     ifs.seekg(0);
     scanner.extractFiles(ifs, "recovered");
 
-    if (std::filesystem::exists("extracted_file_1.jpeg")) {
-        std::cout << "[Info] Test succesful!\n";
-    }else {
-        std::cout << "[Info] Test failed!\n";
-    }
+    std::filesystem::remove("testraw.bin");
+
+    REQUIRE(std::filesystem::exists("extracted_file_1.jpeg"));
+    std::filesystem::remove("extracted_file_1.jpeg");
 }
