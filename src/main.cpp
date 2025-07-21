@@ -10,24 +10,11 @@
 void testRecovery();
 void testCompressionRoundtrip(const std::filesystem::path& inputFile);
 
-void printHelper() {
-    std::cout << "Wrong usage of commands! Usage: \nFileInSight -compress <path>\nFileInSight -decompress <path>";
-}
 
 int main(int argc, char* argv[]) {
 
-    if (argc < 2) {
-        UI interface;
-        interface.start_ui();
-
-        std::system("pause");
-        return 0;
-
-    }else{
-
         return CLIParser::run(argc, argv);
 
-    }
 
     return 0;
 

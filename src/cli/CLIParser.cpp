@@ -148,6 +148,9 @@ int CLIParser::run(int argc, char *argv[]) {
 
     };
 
+    if (argc < 2) {std::cerr << "[Error] Usage: FileInSight -command ...\n"; printHelp(); return 1;}
+
+
     //Check for valid Command
     std::string command = argv[1];
     std::transform(command.begin(), command.end(), command.begin(), ::tolower);

@@ -18,7 +18,6 @@ add_executable(FileInSight
         src/hashing/Hasher.cpp
         src/hashing/Hasher.h
         src/hashing/picosha2.h
-        src/UI/UI.cpp
         src/UI/UI.h
         src/finder/RegExFinder.cpp
         src/finder/RegExFinder.h
