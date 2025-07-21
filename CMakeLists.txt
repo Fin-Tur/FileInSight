@@ -4,11 +4,17 @@ project(FileInSight)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
 
-# === Manually include zstd ===
-include_directories("C:/vcpkg/installed/x64-windows/include")
-link_directories("C:/vcpkg/installed/x64-windows/lib")
-add_definitions(-DZSTD_STATIC_LINKING_ONLY)
+include(FetchContent)
 
+# === ZSTD via FetchContent (as static library) ===
+FetchContent_Declare(
+        zstd
+        GIT_REPOSITORY https://github.com/facebook/zstd.git
+        GIT_TAG v1.5.5
+)
+FetchContent_MakeAvailable(zstd)
+
+# === Haupt-Binary ===
 add_executable(FileInSight
         src/main.cpp
         src/core/FileCollecter.cpp
@@ -18,6 +24,7 @@ add_executable(FileInSight
         src/hashing/Hasher.cpp
         src/hashing/Hasher.h
         src/hashing/picosha2.h
+        src/UI/UI.cpp
         src/UI/UI.h
         src/finder/RegExFinder.cpp
         src/finder/RegExFinder.h
@@ -52,10 +59,9 @@ add_executable(FileInSight
         src/steganography/forensics/RawRecoveryScanner.h
         src/models/FileSignature.h
         src/models/RecoveredFile.h
-        src/UI/UI.cpp
 )
 
-#Test Target
+# === Test-Binary ===
 add_executable(test_runner
         src/tests/test_main.cpp
         src/tests/TestEncryption.cpp
@@ -68,6 +74,7 @@ add_executable(test_runner
         src/hashing/Hasher.cpp
         src/hashing/Hasher.h
         src/hashing/picosha2.h
+        src/UI/UI.cpp
         src/UI/UI.h
         src/finder/RegExFinder.cpp
         src/finder/RegExFinder.h
@@ -102,12 +109,9 @@ add_executable(test_runner
         src/steganography/forensics/RawRecoveryScanner.h
         src/models/FileSignature.h
         src/models/RecoveredFile.h
-        src/UI/UI.cpp
 )
 
-target_include_directories(test_runner PRIVATE src external)
-
-# === TLSH static lib ===
+# === TLSH (lokal) ===
 add_library(tlsh STATIC
         src/thirdparty/fuzzyhashLib/tlsh_impl.cpp
         src/thirdparty/fuzzyhashLib/tlsh_util.cpp
@@ -115,8 +119,11 @@ add_library(tlsh STATIC
 )
 
 target_include_directories(tlsh PUBLIC src/thirdparty/fuzzyhashLib)
-target_include_directories(FileInSight PRIVATE src/thirdparty/fuzzyhashLib)
 
-# === Link libraries ===
-target_link_libraries(FileInSight PRIVATE zstd tlsh)
-target_link_libraries(test_runner PRIVATE zstd tlsh)
+# === Include-Pfade ===
+target_include_directories(FileInSight PRIVATE src ${zstd_SOURCE_DIR}/lib)
+target_include_directories(test_runner PRIVATE src ${zstd_SOURCE_DIR}/lib)
+
+# === Link Libraries ===
+target_link_libraries(FileInSight PRIVATE libzstd_static tlsh)
+target_link_libraries(test_runner PRIVATE libzstd_static tlsh)
