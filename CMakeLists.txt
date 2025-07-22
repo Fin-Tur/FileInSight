@@ -2,17 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 project(FileInSight)
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
 
-include(FetchContent)
 
-# === ZSTD via FetchContent (as static library) ===
-FetchContent_Declare(
-        zstd
-        GIT_REPOSITORY https://github.com/facebook/zstd.git
-        GIT_TAG v1.5.5
-)
-FetchContent_MakeAvailable(zstd)
 
 # === Haupt-Binary ===
 add_executable(FileInSight
@@ -59,11 +50,12 @@ add_executable(FileInSight
         src/steganography/forensics/RawRecoveryScanner.h
         src/models/FileSignature.h
         src/models/RecoveredFile.h
+
 )
 
 # === Test-Binary ===
 add_executable(test_runner
-        src/tests/test_main.cpp
+        src/thirdparty/testing/catch_amalgamated.cpp
         src/tests/TestEncryption.cpp
         src/tests/TestRecovery.cpp
         src/tests/TestCompression.cpp
@@ -111,7 +103,7 @@ add_executable(test_runner
         src/models/RecoveredFile.h
 )
 
-# === TLSH (lokal) ===
+# === TLSH (local) ===
 add_library(tlsh STATIC
         src/thirdparty/fuzzyhashLib/tlsh_impl.cpp
         src/thirdparty/fuzzyhashLib/tlsh_util.cpp
@@ -120,10 +112,16 @@ add_library(tlsh STATIC
 
 target_include_directories(tlsh PUBLIC src/thirdparty/fuzzyhashLib)
 
-# === Include-Pfade ===
-target_include_directories(FileInSight PRIVATE src ${zstd_SOURCE_DIR}/lib)
-target_include_directories(test_runner PRIVATE src ${zstd_SOURCE_DIR}/lib)
+# === ZSTD (locl) ===
+add_subdirectory(src/thirdparty/zstd/zstd-dev/build/cmake EXCLUDE_FROM_ALL)
+
+target_include_directories(FileInSight PRIVATE src src/thirdparty/zstd/zstd-dev/lib)
+target_include_directories(test_runner PRIVATE src src/thirdparty/zstd/zstd-dev/lib)
+
 
 # === Link Libraries ===
 target_link_libraries(FileInSight PRIVATE libzstd_static tlsh)
 target_link_libraries(test_runner PRIVATE libzstd_static tlsh)
+
+
+

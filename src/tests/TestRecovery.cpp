@@ -32,13 +32,14 @@ TEST_CASE("Recovery test succesfull!", "[revocery]"){
     RawRecoveryScanner scanner(false);
     scanner.scan(ifs);
 
-    // Wichtig: Danach zurückspulen, um mit demselben Stream extrahieren zu können
     ifs.clear();
     ifs.seekg(0);
     scanner.extractFiles(ifs, "recovered");
+    ifs.close();
 
-    std::filesystem::remove("testraw.bin");
+
 
     REQUIRE(std::filesystem::exists("extracted_file_1.jpeg"));
     std::filesystem::remove("extracted_file_1.jpeg");
+    std::filesystem::remove("testraw.bin");
 }

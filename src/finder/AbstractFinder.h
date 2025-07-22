@@ -2,12 +2,10 @@
 // Created by Admin on 05.07.2025.
 //
 #include <vector>
-
+#include "../models/FileInfo.h"
 
 #ifndef ABSTRACTFINDER_H
 #define ABSTRACTFINDER_H
-
-struct FileInfo;
 
 class AbstractFinder {
     public:

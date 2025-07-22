@@ -11,6 +11,8 @@ std::string UI::convertBytes(std::size_t bytes) {
         return std::to_string(bytes/1024)+"KB";
     }else if (bytes < 1024*1024*1024) {
         return std::to_string(bytes/(1024*1024))+"MB";
+    }else {
+        return std::to_string(bytes/(1024*1024*1024))+"GB";
     }
 }
 

@@ -1,7 +1,7 @@
 #include "HuffmanTree.h"
 
 #include <ostream>
-#include <bits/fs_fwd.h>
+#include <filesystem>
 
 void HuffmanTree::build(const std::unordered_map<unsigned char, int> &freqMap) {
     //Define lambda comparer func

@@ -8,7 +8,6 @@
 #include <filesystem>
 #include <iostream>
 #include <vector>
-#include <bits/ostream.tcc>
 #include <fstream>
 
 #include "../analyzer/EntropyAnalyzer.h"
