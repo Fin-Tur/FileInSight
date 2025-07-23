@@ -10,7 +10,7 @@ bool HuffmanCompressor::compress(const std::filesystem::path& src, const std::fi
     std::unordered_map<unsigned char, int> freqMap;
     std::ifstream ifs(src, std::ios::binary);
     if (!ifs.is_open()) {
-        std::cerr << "Error opening file " << src << std::endl;
+        std::cerr << "[Error] Could not open file!" << src << std::endl;
         return false;
     }
     //gather original Datasize to store in file for lateron padding

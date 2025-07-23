@@ -17,7 +17,7 @@ RawRecoveryScanner::RawRecoveryScanner(const bool& enable_UTF16LE) {
 void RawRecoveryScanner::scan(std::ifstream& ifs) {
     //check for valid stream
     if (!ifs.is_open()) {
-        std::cout << "[Error] Invalid File stream!\n";
+        std::cerr << "[Error] Invalid File stream!\n";
     }
     //Create recFile instance
     std::unique_ptr<RecoveredFile> recFile;

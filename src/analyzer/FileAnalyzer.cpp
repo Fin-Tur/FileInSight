@@ -15,10 +15,10 @@
 void FileAnalyzer::analyze(const std::string& src) {
     //gather File(Info)
     if (!std::filesystem::exists(src)) {
-        std::cout << "[Error] Unknown File!\n";
+        std::cerr << "[Error] Unknown File!\n";
     }
     if (!std::filesystem::is_regular_file(src)) {
-        std::cout << "[Error] Not a regular file!\n";
+        std::cerr << "[Error] Not a regular file!\n";
     }
 
     FileInfo file = FileCollector::collect(src)[0];

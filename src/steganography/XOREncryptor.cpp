@@ -19,7 +19,7 @@ void XOREncryptor::encrypt(const std::filesystem::path& src, const std::string& 
     //Open file
     std::ifstream ifs(src, std::ios::binary);
     if (!ifs.is_open()) {
-        std::cerr << "Failed to open " << src << " for reading!" << std::endl;
+        std::cerr << "[Error] Failed to open " << src << " for reading!" << std::endl;
         return;
     }
     //Read file
@@ -29,7 +29,7 @@ void XOREncryptor::encrypt(const std::filesystem::path& src, const std::string& 
 
     std::vector<unsigned char> data(size);
     if (!ifs.read(reinterpret_cast<char*>(data.data()), size)) {
-        std::cerr << "Error reading file!" << std::endl;
+        std::cerr << "[Error] Could not read file!" << std::endl;
         return;
     }
 
@@ -65,7 +65,7 @@ void XOREncryptor::decrypt(const std::filesystem::path &src, const std::string& 
     //OPen file
     std::ifstream ifs(src, std::ios::binary);
     if (!ifs.is_open()) {
-        std::cerr << "Failed to open " << src << " for reading!" << std::endl;
+        std::cerr << "[Error] Failed to open " << src << " for reading!" << std::endl;
         return;
     }
     //Read salt
@@ -79,7 +79,7 @@ void XOREncryptor::decrypt(const std::filesystem::path &src, const std::string& 
     //Read file
     std::vector<unsigned char> data(dataSize);
     if (!ifs.read(reinterpret_cast<char*>(data.data()), dataSize)) {
-        std::cerr << "Error reading file!" << std::endl;
+        std::cerr << "[Error] Could not read file!" << std::endl;
         return;
     }
     ifs.close();

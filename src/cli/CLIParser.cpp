@@ -175,7 +175,7 @@ int CLIParser::handleCompress(const std::string &path) {
 int CLIParser::handleDecompress(const std::string &path) {
     std::string outputFile = path.substr(0, path.size()-5);
     if (path.size() < 5 || path.substr(path.size() - 5) != ".fisc") {
-        std::cout << "[Error] Expected .fisc file for decompression!\n";
+        std::cerr << "[Error] Expected .fisc file for decompression!\n";
         return 1;
     }
     zstdCompressor compressor;

@@ -32,7 +32,7 @@ bool zstdCompressor::compress(const std::filesystem::path& src, const std::files
 
     // Check for compression errors
     if (ZSTD_isError(compressedSize)) {
-        std::cerr << "Compression failed: " << ZSTD_getErrorName(compressedSize) << '\n';
+        std::cerr << "[Error] Compression failed: " << ZSTD_getErrorName(compressedSize) << '\n';
         return false;
     }
 
@@ -50,7 +50,7 @@ bool zstdCompressor::decompress(const std::filesystem::path& src, const std::fil
     // Open the compressed file
     std::ifstream ifs(src, std::ios::binary);
     if (!ifs) {
-        std::cerr << "Error opening file!\n";
+        std::cerr << "[Error] Could not open file!\n";
         return false;
     }
 
@@ -58,7 +58,7 @@ bool zstdCompressor::decompress(const std::filesystem::path& src, const std::fil
     size_t originalSize = 0;
     ifs.read(reinterpret_cast<char*>(&originalSize), sizeof(size_t));
     if (!ifs.good()) {
-        std::cerr << "Error occurred while reading file!\n";
+        std::cerr << "[Error] Could not read File!\n";
         return false;
     }
 
@@ -78,20 +78,20 @@ bool zstdCompressor::decompress(const std::filesystem::path& src, const std::fil
     );
 
     if (ZSTD_isError(result)) {
-        std::cerr << "Decompression failed: " << ZSTD_getErrorName(result) << '\n';
+        std::cerr << "[Error] Decompression failed: " << ZSTD_getErrorName(result) << '\n';
         return false;
     }
 
     //Write the decompressed data to the output file
     std::ofstream ofs(dst, std::ios::binary);
     if (!ofs) {
-        std::cerr << "Error opening output file!\n";
+        std::cerr << "[Error] Could not open output file!\n";
         return false;
     }
 
     ofs.write(outputData.data(), result);
     if (!ofs.good()) {
-        std::cerr << "Error writing output file!\n";
+        std::cerr << "[Error] Could not write output file!\n";
     }
     return true;
 }

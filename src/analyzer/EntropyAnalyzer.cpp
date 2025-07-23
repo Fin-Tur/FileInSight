@@ -12,7 +12,7 @@
 
 double EntropyAnalyzer::analyze(const std::string& src) {
     if (!std::filesystem::exists(src)) {
-        std::cout << "[Error] File does not exist!" << std::endl;
+        std::cerr << "[Error] File does not exist!" << std::endl;
     }
 
     std::ifstream ifs(src, std::ios::binary);

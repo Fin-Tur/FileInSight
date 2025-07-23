@@ -63,7 +63,7 @@ void DuplicateFinder::deleteDuplicates(std::vector<FileInfo> &duplicates) {
                     this->deletedFiles.insert(duplicates[i].path);
                     std::cout << "Removed file @ " << duplicates[i].path << std::endl;
                 } else {
-                    std::cout << "[Error] File cannot be removed (protected)\n";
+                    std::cerr << "[Error] File cannot be removed (protected)\n";
                 }
             } catch (const std::filesystem::filesystem_error& e) {
                 std::cerr << "[Error] " << e.what() << '\n';

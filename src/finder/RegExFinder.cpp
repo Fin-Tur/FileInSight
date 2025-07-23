@@ -19,7 +19,7 @@ std::vector<std::vector<FileInfo>> RegExFinder::find() {
             }
         }
     }catch (const std::regex_error& e) {
-        std::cout << "[RegEx Error] Invalid Pattern: " << e.what() << std::endl;
+        std::cerr << "[RegEx Error] Invalid Pattern: " << e.what() << std::endl;
     }
 
     wrapped.emplace_back(matches);

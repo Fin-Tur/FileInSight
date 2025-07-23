@@ -14,20 +14,20 @@
 std::optional<std::pair<FileInfo, std::string>> MagicByteAnalyzer::analyzeFile(const std::filesystem::path& path) {
     //Check src
     if (!(std::filesystem::exists(path) && std::filesystem::is_regular_file(path))) {
-        std::cout << "[Error] " << path << " doesn't exist or isn't a regular file!\n" << std::endl;
+        std::cerr << "[Error] " << path << " doesn't exist or isn't a regular file!\n" << std::endl;
         return std::nullopt;
     }
     //Open FIle
     std::ifstream ifs(path, std::ios::binary);
     if (!ifs.is_open()) {
-        std::cout << "[Error] " << path << " could not be opened!\n" << std::endl;
+        std::cerr << "[Error] " << path << " could not be opened!\n" << std::endl;
         return std::nullopt;
     }
     //Read first 8 bytes
     unsigned char magicBytes[8];
     ifs.read(reinterpret_cast<char *>(magicBytes), 8);
     if (ifs.gcount() != 8) {
-        std::cout << "[Error] " << path << " could not be read!\n" << std::endl;
+        std::cerr << "[Error] " << path << " could not be read!\n" << std::endl;
         return std::nullopt;
     }
     ifs.close();
@@ -56,7 +56,7 @@ std::vector<std::pair<FileInfo, std::string> > MagicByteAnalyzer::analyzePath(co
     //Get Files
     std::vector<FileInfo> files = FileCollector::collect(path);
     if (files.empty()) {
-        std::cout << "[Error] " << path << " could not be collected!\n" << std::endl;
+        std::cerr << "[Error] " << path << " could not be collected!\n" << std::endl;
     }
     //Analyze Files
     std::vector<std::pair<FileInfo, std::string>> flaggedFiles;
