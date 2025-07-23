@@ -129,5 +129,4 @@ void DuplicateFinder::computeHashesParallel(std::vector<FileInfo> &files) {
         }
     }
 
-    std::cout << "[Hashing Summary] Success: " << success << ", Failed: " << failed << "\n";
 }

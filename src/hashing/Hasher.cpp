@@ -7,7 +7,6 @@
 
 // Compute SHA-256 hash of a file
 std::string Hasher::computeHash(const FileInfo& file, bool trueHash) {
-   std::cout << "Computing Hash for file: " << file.path.string() << std::endl;
 
     // Security check (DLLs etc.)
     if (DuplicateFinder::isProtected(file.path)) {

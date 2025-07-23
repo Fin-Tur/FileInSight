@@ -91,10 +91,11 @@ std::vector<FileInfo> FileCollector::collect(const std::string& path) {
                           << " (" << size << " Bytes, ~"
                           << info.lastUsed << " days old)\n";
                           */
-                std::cout << "[Info] Collection succesful!\n";
+
             }
         }
     }
+    std::cout << "[Info] Collection succesful!\n";
     return files;
 }
 

@@ -72,7 +72,7 @@ void RawRecoveryScanner::scan(std::ifstream& ifs) {
 void RawRecoveryScanner::extractFiles(std::ifstream& ifs, const std::string& outputDir) const {
     //Check for valid fstream
     if (!ifs.is_open()) {
-        std::cout << "[Error] Invalid File stream!\n";
+        std::cerr << "[Error] Invalid File stream!\n";
     }
     //Create names for files
     std::vector<std::string> fileNames(this->extractedFiles.size());
