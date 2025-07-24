@@ -52,7 +52,7 @@ It combines multiple features such as compression, encryption, file recovery, du
 
 ### 🔨 Needs
 
-- C++17-compatible Compiler (z. B. `g++`, `clang++`, MSVC)
+- C++17-compatible Compiler (tested on GCC 13.1.0 and MinGW 11.0 w64)
 - `CMake` ≥ 3.15
 
 ### ⚙️ Compiling

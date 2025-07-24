@@ -22,7 +22,10 @@
 #include "../analyzer/FileAnalyzer.h"
 #include "../analyzer/PathAnalyzer.h"
 #include "../steganography/forensics/RawRecoveryScanner.h"
+#include "compression/HuffmanCompressor.h"
+#include "config/Settings.h"
 
+Settings CLIParser::config;
 
 void CLIParser::printHelp() {
     std::cout << "Commands:\n"
@@ -154,6 +157,7 @@ int CLIParser::run(int argc, char *argv[]) {
     std::string command = argv[1];
     std::transform(command.begin(), command.end(), command.begin(), ::tolower);
 
+
     if (dispatchMap.contains(command)) {
         return dispatchMap.at(command)(argc, argv);  // Run matching lambda
     } else {
@@ -165,8 +169,18 @@ int CLIParser::run(int argc, char *argv[]) {
 }
 
 int CLIParser::handleCompress(const std::string &path) {
-    zstdCompressor compressor;
-    compressor.compress(path, path+".fisc");
+    //get compressor
+    std::unique_ptr<AbstractCompressor> compressor;
+    if (config.getCompression() == "zstd") {
+        compressor = std::make_unique<zstdCompressor>();
+    }else if (config.getCompression() == "huffman") {
+        compressor = std::make_unique<HuffmanCompressor>();
+    }else {
+        std::cerr << "[Error] Invalid config for parameter <compression>!\n";
+        return 1;
+    }
+    //compress
+    compressor->compress(path, path+".fisc", config.getCompLevel());
     std::filesystem::remove(path);
     std::cout << "[Info] Compression successful!\n";
     return 0;
@@ -178,8 +192,18 @@ int CLIParser::handleDecompress(const std::string &path) {
         std::cerr << "[Error] Expected .fisc file for decompression!\n";
         return 1;
     }
-    zstdCompressor compressor;
-    compressor.decompress(path, outputFile);
+    //get decompressor
+    std::unique_ptr<AbstractCompressor> compressor;
+    if (config.getCompression() == "zstd") {
+        compressor = std::make_unique<zstdCompressor>();
+    }else if (config.getCompression() == "huffman") {
+        compressor = std::make_unique<HuffmanCompressor>();
+    }else {
+        std::cerr << "[Error] Invalid config for parameter <compression>!\n";
+        return 1;
+    }
+    //decompress
+    compressor->decompress(path, outputFile);
     std::filesystem::remove(path);
     std::cout << "[Info] Decompression successful!\n";
     return 0;
@@ -310,7 +334,7 @@ int CLIParser::handleRecovery(const std::string &path) {
     }
 
     std::ifstream ifs(path, std::ios::binary);
-    RawRecoveryScanner scanner(false);
+    RawRecoveryScanner scanner(config.get_utf_16_le_enabled());
     scanner.scan(ifs);
     scanner.extractFiles(ifs, "recovered");
     ifs.close();

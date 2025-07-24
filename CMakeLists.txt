@@ -51,6 +51,8 @@ add_executable(FileInSight
         src/steganography/forensics/RawRecoveryScanner.h
         src/models/FileSignature.h
         src/models/RecoveredFile.h
+        src/config/Settings.cpp
+        src/config/Settings.h
 
 )
 

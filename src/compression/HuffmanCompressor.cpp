@@ -5,7 +5,7 @@
 #include <bitset>
 #include <sstream>
 
-bool HuffmanCompressor::compress(const std::filesystem::path& src, const std::filesystem::path& dst) {
+bool HuffmanCompressor::compress(const std::filesystem::path& src, const std::filesystem::path& dst, const int compressionLevel) {
     //Create FreqMap
     std::unordered_map<unsigned char, int> freqMap;
     std::ifstream ifs(src, std::ios::binary);

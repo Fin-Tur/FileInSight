@@ -8,9 +8,8 @@
 #include <vector>
 #include <iostream>
 
-bool zstdCompressor::compress(const std::filesystem::path& src, const std::filesystem::path& dst) {
+bool zstdCompressor::compress(const std::filesystem::path& src, const std::filesystem::path& dst, const int compressionLevel) {
     //Define compressionLevel (1-22)
-    int compressionLevel = 18;
 
     // Read the input file into a buffer
     std::ifstream ifs(src, std::ios::binary);

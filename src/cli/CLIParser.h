@@ -9,12 +9,16 @@
 #include <set>
 #include <string>
 
+#include "config/Settings.h"
+
 
 class CLIParser {
 public:
     static void printHelp();
     static int run(int argc, char* argv[]);
 private:
+    static Settings config;
+
     static int handleCompress(const std::string& path);
     static int handleDecompress(const std::string& path);
     static int handleFind(const std::string& path, const std::string& pattern);
