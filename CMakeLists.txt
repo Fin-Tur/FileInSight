@@ -53,6 +53,11 @@ add_executable(FileInSight
         src/models/RecoveredFile.h
         src/config/Settings.cpp
         src/config/Settings.h
+        src/steganography/AESEncryptor.cpp
+        src/steganography/AESEncryptor.h
+        src/thirdparty/aesEnc/aes.c
+        src/thirdparty/aesEnc/aes.h
+        src/thirdparty/aesEnc/aes.hpp
 
 )
 
@@ -104,6 +109,9 @@ add_executable(test_runner
         src/steganography/forensics/RawRecoveryScanner.h
         src/models/FileSignature.h
         src/models/RecoveredFile.h
+        src/thirdparty/aesEnc/aes.c
+        src/thirdparty/aesEnc/aes.h
+        src/thirdparty/aesEnc/aes.hpp
 )
 
 # === TLSH (local) ===
