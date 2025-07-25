@@ -39,6 +39,22 @@ Settings::Settings() {
 }
 
 void Settings::setConfig() {
+    nlohmann::json j;
+    j["compression"] = this->compression;
+    j["compLevel"] = this->compressionLevel;
+    j["encryption"] = this->encryption;
+    j["enable_utf_16_le"] = this->utf_16_le_enabled;
 
+    std::ofstream ofs("config.json");
+    ofs << j.dump();
+    ofs.close();
+}
+
+void Settings::printSettings() const {
+    std::cout << "[Info] Config state:"
+            << "\n  -> Compression: " << this->compression
+            << "\n  -> Comp Level: " << std::to_string(this->compressionLevel)
+            << "\n  -> Encryption: " << this->encryption
+            << "\n  -> Enable UTF-16-LE: " << std::to_string(this->utf_16_le_enabled) << "\n";
 }
 

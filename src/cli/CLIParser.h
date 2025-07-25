@@ -32,6 +32,8 @@ private:
     static int handleFileInfo(const std::string& path);
     static int handlePathInfo(const std::string& path);
     static int handleRecovery(const std::string& path);
+
+    static int handleSettings(int argc, char* arg[]);
 };
 
 

@@ -41,7 +41,8 @@ void CLIParser::printHelp() {
             << "  FileInSight -entropy <file> : Displays Shannon Entropy\n"
             << "  FileInSight -info <file> : Displays File info\n"
             << "  FileInSight -path <path> : Displays Path info\n"
-            << "  FileInSight -recover <raw dump> : Recovers files from Raw dump\n";
+            << "  FileInSight -recover <raw dump> : Recovers files from Raw dump\n"
+            << "  FileInSight -config <param/display> <value> : Edits/Accesses Settings\n";
 }
 
 
@@ -146,6 +147,13 @@ int CLIParser::run(int argc, char *argv[]) {
                 return 1;
             }
             return CLIParser::handleRecovery(argv[2]);
+        }},
+        {"-config", [](int argc, char* argv[]) -> int {
+            if (argc < 3) {
+                std::cerr << "[Error] Usage: -config <arg/display> <value>\n";
+                return 1;
+            }
+            return CLIParser::handleSettings(argc, argv);
         }}
 
     };
@@ -341,5 +349,41 @@ int CLIParser::handleRecovery(const std::string &path) {
     return 0;
 }
 
+int CLIParser::handleSettings(int argc, char *argv[]) {
+    //Create dispatch funcs map
+    std::unordered_map<std::string, std::function<void(const std::string&)>> functions = {
+        {"compression", [&](const std::string& v){ config.setCompression(v); }},
+        {"compLevel", [&](const std::string& v){ config.setCompLevel(std::stoi(v)); }},
+        {"encryption", [&](const std::string& v){ config.setEncryption(v); }},
+        {"enable_utf16", [&](const std::string& v){ config.set_utf_16_le_enabled(v=="true"); }},
+    };
+    //initialize setting
+    std::string setting = argv[2];
+
+    if (setting == "display") {
+        config.printSettings();
+        return 0;
+    }
+    //Run command
+    if (argc == 4) {
+        std::string value = argv[3];
+        if (config.validArguments.contains(setting)) {
+            if (std::find(config.validArguments.at(setting).begin(), config.validArguments.at(setting).end(), value) != config.validArguments.at(setting).end()) {
+                functions.at(setting)(value);
+                config.setConfig();
+                std::cout << "[Info] Config updated!\n";
+                return 0;
+            }
+        }
+    }
+    //Error of usage; print valid parameters
+    std::cout << "[Error] Wrong usage of -config parameter. Valid parameters:\n"
+                       << "  FileInSight -config display\n"
+                       << "  FileInSight -config compression {zstd, huffman}\n"
+                       << "  FileInSight -config compLevel {1-22}\n"
+                       << "  FileInSIght -config encryption {xor, aes}\n"
+                       << "  FileInSight -config enable_utf16 {true, false}\n";
+    return 1;
+}
 
 
