@@ -33,7 +33,7 @@ It combines multiple features such as compression, encryption, file recovery, du
   - Easily adjustable Settings (compression method and level, encryption method etc.)
 
 - 🧪 **Testing**
-- Catch2 unit testing framework integrated
+  - Catch2 unit testing framework integrated
 
 ---
 
@@ -41,17 +41,17 @@ It combines multiple features such as compression, encryption, file recovery, du
 
 - **Commands**
 
-<img width="929" height="313" alt="Screenshot 2025-07-25 112752" src="https://github.com/user-attachments/assets/f20a7370-42d9-4914-a8b6-13eafba8ba9f" />
+ <img width="929" height="313" alt="Screenshot 2025-07-25 112752" src="https://github.com/user-attachments/assets/f20a7370-42d9-4914-a8b6-13eafba8ba9f" />
 
 
 - **Config**
 
-<img width="392" height="128" alt="Screenshot 2025-07-25 112722" src="https://github.com/user-attachments/assets/13b4c7ea-3256-4fb2-a6b6-a54acb4d16e9" />
+ <img width="392" height="128" alt="Screenshot 2025-07-25 112722" src="https://github.com/user-attachments/assets/13b4c7ea-3256-4fb2-a6b6-a54acb4d16e9" />
 
 
 - **Dupes**
 
-<img width="781" height="257" alt="Screenshot 2025-07-25 112944" src="https://github.com/user-attachments/assets/ccf3765c-9099-49e8-b34f-9f1b716f2ce2" />
+ <img width="781" height="257" alt="Screenshot 2025-07-25 112944" src="https://github.com/user-attachments/assets/ccf3765c-9099-49e8-b34f-9f1b716f2ce2" />
 
 
 ---
