@@ -1,3 +1,4 @@
+
 # FileInSight
 
 **FileInSight** is a file management and forensic analysis tool implemented in modern C++.  
@@ -6,29 +7,30 @@ It combines multiple features such as compression, encryption, file recovery, du
 ## 🔧 Features
 
 - 🔍 **File Analytics**
-    - Entropy analysis
-    - Magic-Byte-Scanner to identify file types
-    - Path analyzing
-    - Age finder (last used > x days ago)
+  - Entropy analysis
+  - Magic-Byte-Scanner to identify file types
+  - Path analyzing
+  - Age finder (last used > x days ago)
 
 - 🧠 **Similarity and Duplicate Finder**
-    - Hashing-based Duplicate Scanner
-    - **TLSH** (Trend Micro Locality Sensitive Hashing) for fuzzy Similarity Detection
-    - Comparison of Hashes, Entropy, Filenames etc.
+  - Hashing-based Duplicate Scanner
+  - **TLSH** (Trend Micro Locality Sensitive Hashing) for fuzzy Similarity Detection
+  - Comparison of Hashes, Entropy, Filenames etc.
 
 - 📦 **Compression**
-    - Huffman-Compression (implementated w/o libraries)
-    - Zstandard (zstd) for professional Compression
+  - Huffman-Compression (implementated w/o libraries)
+  - Zstandard (zstd) for professional Compression
 
 - 🔐 **Encryption**
-    - Simple XOR-based Encryption w/salt (Learning) experience
-    - Safe AES encryption for real world use
+  - Simple XOR-based Encryption w/salt (Learning) experience
+  - Safe AES encryption for real world use
 
 - 🧰 **Recovery-Function**
-    - File Recovery on .bin and .raw dumps using Magic Bytes (e.g. `.png`, `.zip`)
+  - File Recovery on .bin and .raw dumps using Magic Bytes (e.g. `.png`, `.zip`)
 
 - 🖥 **Simple Usage**
-    - Command-Line-Interface for all functions
+  - Command-Line-Interface for all functions
+  - Easily adjustable Settings (compression method and level, encryption method etc.)
 
 - 🧪 **Testing**
 - Catch2 unit testing framework integrated
@@ -39,11 +41,17 @@ It combines multiple features such as compression, encryption, file recovery, du
 
 - **Commands**
 
-<img width="962" height="308" alt="helper" src="https://github.com/user-attachments/assets/8db38112-6ca8-4998-be2a-894ff61d14d8" />
+<img width="929" height="313" alt="Screenshot 2025-07-25 112752" src="https://github.com/user-attachments/assets/f20a7370-42d9-4914-a8b6-13eafba8ba9f" />
 
-- **File Info (e.g)**
 
-<img width="1030" height="196" alt="info" src="https://github.com/user-attachments/assets/f050fa75-aa9c-4305-b50e-bbd35e1c8f78" />
+- **Config**
+
+<img width="392" height="128" alt="Screenshot 2025-07-25 112722" src="https://github.com/user-attachments/assets/13b4c7ea-3256-4fb2-a6b6-a54acb4d16e9" />
+
+
+- **Dupes**
+
+<img width="781" height="257" alt="Screenshot 2025-07-25 112944" src="https://github.com/user-attachments/assets/ccf3765c-9099-49e8-b34f-9f1b716f2ce2" />
 
 
 ---
