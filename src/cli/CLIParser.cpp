@@ -189,18 +189,17 @@ int CLIParser::handleCompress(const std::string &path) {
         return 1;
     }
     //compress
-    compressor->compress(path, path+".fisc", config.getCompLevel());
-    std::filesystem::remove(path);
-    std::cout << "[Info] Compression successful!\n";
-    return 0;
+    if (compressor->handleCompress(path, config.getCompLevel())) {
+        std::cout << "[Info] Compression successful!\n";
+        return 0;
+    }else {
+        std::cerr << "[Error] Compression failed!\n";
+        return 1;
+    }
+
 }
 
 int CLIParser::handleDecompress(const std::string &path) {
-    std::string outputFile = path.substr(0, path.size()-5);
-    if (path.size() < 5 || path.substr(path.size() - 5) != ".fisc") {
-        std::cerr << "[Error] Expected .fisc file for decompression!\n";
-        return 1;
-    }
     //get decompressor
     std::unique_ptr<AbstractCompressor> compressor;
     if (config.getCompression() == "zstd") {
@@ -212,10 +211,14 @@ int CLIParser::handleDecompress(const std::string &path) {
         return 1;
     }
     //decompress
-    compressor->decompress(path, outputFile);
-    std::filesystem::remove(path);
-    std::cout << "[Info] Decompression successful!\n";
-    return 0;
+    if (compressor->handleDecompress(path)) {
+        std::cout << "[Info] Decompression successful!\n";
+        return 0;
+    }else {
+        std::cerr << "[Error] Decompression failed!\n";
+        return 1;
+    }
+
 }
 
 int CLIParser::handleFind(const std::string &path, const std::string &pattern) {
