@@ -95,9 +95,15 @@ std::vector<FileInfo> FileCollector::collect(const std::string& path) {
             }
         }
     }
-    std::cout << "[Info] Collection succesful!\n";
-    return files;
+    if (!files.empty()) {
+        std::cout << "[Info] Collection succesful!\n";
+        return files;
+    }else {
+        std::cout << "[Error] Collection failed\n";
+        return {};
+    }
 }
+
 
 bool FileCollector::isPathBlacklisted(const std::string& pathStr) {
     std::filesystem::path path = std::filesystem::absolute(pathStr);

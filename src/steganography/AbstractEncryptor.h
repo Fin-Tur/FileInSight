@@ -16,6 +16,9 @@ class AbstractEncryptor {
     virtual void decrypt(const std::string& src, const std::string& password, const size_t& iterations) = 0;
 
     static std::vector<unsigned char> generateSalt();
+
+    bool handleEncryption(const std::string &src, const std::string &password, const int iterations);
+    bool handleDecryption(const std::string &src, const std::string &password, const int iterations);
 };
 
 #endif //ABSTRACTENCRYPTOR_H
