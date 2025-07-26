@@ -7,12 +7,13 @@
 #include <filesystem>
 #include <vector>
 
+#include "AbstractEncryptor.h"
 
-class XOREncryptor {
+
+class XOREncryptor : public AbstractEncryptor{
 public:
-    static void encrypt(const std::filesystem::path& src, const std::string& password);
-    static void decrypt(const std::filesystem::path& src, const std::string& password);
-    static std::vector<uint8_t> generateSalt();
+    void encrypt(const std::string& src, const std::string& password, const size_t& iterations) override;
+    void decrypt(const std::string& src, const std::string& password, const size_t& iterations) override;
 };
 
 

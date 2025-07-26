@@ -58,6 +58,8 @@ add_executable(FileInSight
         src/thirdparty/aesEnc/aes.c
         src/thirdparty/aesEnc/aes.h
         src/thirdparty/aesEnc/aes.hpp
+        src/steganography/AbstractEncryptor.h
+        src/steganography/AbstractEncryptor.cpp
 
 )
 

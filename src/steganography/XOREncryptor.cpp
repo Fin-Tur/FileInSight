@@ -8,14 +8,8 @@
 #include <iostream>
 #include <random>
 
-std::vector<unsigned char> XOREncryptor::generateSalt() {
-    std::vector<unsigned char> salt(16);
-    std::random_device rd;
-    std::generate(salt.begin(), salt.end(), [&rd]() { return rd() % 256; });
-    return salt;
-}
 
-void XOREncryptor::encrypt(const std::filesystem::path& src, const std::string& password) {
+void XOREncryptor::encrypt(const std::string& src, const std::string& password, const size_t& iterations) {
     //Open file
     std::ifstream ifs(src, std::ios::binary);
     if (!ifs.is_open()) {
@@ -36,7 +30,7 @@ void XOREncryptor::encrypt(const std::filesystem::path& src, const std::string& 
     ifs.close();
 
     //Generate hash
-    std::vector<unsigned char> salt = generateSalt();
+    std::vector<unsigned char> salt = AbstractEncryptor::generateSalt();
     std::vector<unsigned char> key(password.begin(), password.end());
     //salt + key = input
     std::vector<unsigned char> input;
@@ -61,7 +55,7 @@ void XOREncryptor::encrypt(const std::filesystem::path& src, const std::string& 
 
 }
 
-void XOREncryptor::decrypt(const std::filesystem::path &src, const std::string& password) {
+void XOREncryptor::decrypt(const std::string &src, const std::string& password, const size_t& iterations) {
     //OPen file
     std::ifstream ifs(src, std::ios::binary);
     if (!ifs.is_open()) {

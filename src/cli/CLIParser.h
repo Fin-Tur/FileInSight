@@ -26,8 +26,8 @@ private:
     static int handleDuplicates(const std::string& path);
     static int handleSimilar(const std::string& file, const std::string& dir);
     static int handleAging(const std::string& path, int ageCap);
-    static int handleXOREncrypt(const std::string& path, std::string& password);
-    static int handleXORDecrypt(const std::string& path, std::string& password);
+    static int handleEncrypt(const std::string& path, std::string& password);
+    static int handleDecrypt(const std::string& path, std::string& password);
     static int handleEntropy(const std::string& path);
     static int handleFileInfo(const std::string& path);
     static int handlePathInfo(const std::string& path);

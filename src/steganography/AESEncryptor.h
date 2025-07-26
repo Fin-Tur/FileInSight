@@ -5,16 +5,18 @@
 #ifndef AESENCRYPTOR_H
 #define AESENCRYPTOR_H
 #include <string>
+
+#include "AbstractEncryptor.h"
 #include "../thirdparty/aesEnc/aes.hpp"
 
 
-class AESEncryptor {
+class AESEncryptor : public AbstractEncryptor{
 public:
-    static void encrypt(const std::string& src, std::string& password);
-    static void decrypt(const std::string& src, std::string& password);
+    void encrypt(const std::string& src, const std::string& password, const size_t& iterations) override;
+    void decrypt(const std::string& src, const std::string& password, const size_t& iterations) override;
 
 private:
-   static void deriveKeyFromPassword(const std::string& password, std::array<uint8_t, 32> &key);
+   static void deriveKeyFromPassword(const std::vector<uint8_t>& password, std::array<uint8_t, 32> &key, const size_t& iterations);
 };
 
 

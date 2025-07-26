@@ -12,7 +12,8 @@ Settings::Settings() {
         nlohmann::json j;
         j["compression"] = "zstd";
         j["compLevel"] = 15;
-        j["encryption"] = "xor";
+        j["encryption"] = "aes";
+        j["keyDerivationIterations"] = 10000;
         j["enable_utf_16_le"] = false;
 
         std::ofstream ofs("config.json");
@@ -33,6 +34,7 @@ Settings::Settings() {
     this->compression = j.value("compression", this->compression);
     this->compressionLevel = j.value("compLevel", this->compressionLevel);
     this->encryption = j.value("encryption", this->encryption);
+    this->keyDerivationIterations = j.value("keyDerivationIterations", this->keyDerivationIterations);
     this->utf_16_le_enabled = j.value("enable_utf_16_le", this->utf_16_le_enabled);
 
     ifs.close();
@@ -43,6 +45,7 @@ void Settings::setConfig() {
     j["compression"] = this->compression;
     j["compLevel"] = this->compressionLevel;
     j["encryption"] = this->encryption;
+    j["keyDerivationIterations"] = this->keyDerivationIterations;
     j["enable_utf_16_le"] = this->utf_16_le_enabled;
 
     std::ofstream ofs("config.json");
@@ -55,6 +58,7 @@ void Settings::printSettings() const {
             << "\n  -> Compression: " << this->compression
             << "\n  -> Comp Level: " << std::to_string(this->compressionLevel)
             << "\n  -> Encryption: " << this->encryption
+            << "\n  -> Key Derivation Iterations: " << this->keyDerivationIterations
             << "\n  -> Enable UTF-16-LE: " << std::to_string(this->utf_16_le_enabled) << "\n";
 }
 

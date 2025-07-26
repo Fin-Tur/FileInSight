@@ -24,6 +24,7 @@
 #include "../steganography/forensics/RawRecoveryScanner.h"
 #include "compression/HuffmanCompressor.h"
 #include "config/Settings.h"
+#include "steganography/AESEncryptor.h"
 
 Settings CLIParser::config;
 
@@ -110,7 +111,7 @@ int CLIParser::run(int argc, char *argv[]) {
               return 1;
           }
             std::string password = argv[3];
-            return CLIParser::handleXOREncrypt(argv[2], password);
+            return CLIParser::handleEncrypt(argv[2], password);
         }},
         { "-decrypt", [](int argc, char* argv[]) -> int {
             if (argc != 4) {
@@ -118,7 +119,7 @@ int CLIParser::run(int argc, char *argv[]) {
                 return 1;
             }
             std::string password = argv[3];
-            return CLIParser::handleXORDecrypt(argv[2], password);
+            return CLIParser::handleDecrypt(argv[2], password);
         }},
         { "-entropy", [](int argc, char* argv[]) -> int {
             if (argc != 3) {
@@ -306,14 +307,26 @@ int CLIParser::handleAging(const std::string &path, int ageCap) {
     return 0;
 }
 
-int CLIParser::handleXOREncrypt(const std::string &path, std::string &password) {
-    XOREncryptor::encrypt(path, password);
+int CLIParser::handleEncrypt(const std::string &path, std::string &password) {
+    std::unique_ptr<AbstractEncryptor> encryptor;
+    if (config.getEncryption() == "xor") {
+        encryptor = std::make_unique<XOREncryptor>();
+    }else {
+        encryptor = std::make_unique<AESEncryptor>();
+    }
+    encryptor->encrypt(path, password, config.getkeyDerivation());
     std::cout << "[Info] Encryption succesfull!\n";
     return 0;
 }
 
-int CLIParser::handleXORDecrypt(const std::string &path, std::string &password) {
-    XOREncryptor::decrypt(path, password);
+int CLIParser::handleDecrypt(const std::string &path, std::string &password) {
+    std::unique_ptr<AbstractEncryptor> decryptor;
+    if (config.getEncryption() == "xor") {
+        decryptor = std::make_unique<XOREncryptor>();
+    }else {
+        decryptor = std::make_unique<AESEncryptor>();
+    }
+    decryptor->decrypt(path, password, config.getkeyDerivation());
     std::cout << "[Info] Decryption succesfull!\n";
     return 0;
 }
@@ -355,6 +368,7 @@ int CLIParser::handleSettings(int argc, char *argv[]) {
         {"compression", [&](const std::string& v){ config.setCompression(v); }},
         {"compLevel", [&](const std::string& v){ config.setCompLevel(std::stoi(v)); }},
         {"encryption", [&](const std::string& v){ config.setEncryption(v); }},
+        {"keyDerivation", [&](const std::string& v){ config.setkeyDerivation(std::pow(10, std::stoi(v))); }},
         {"enable_utf16", [&](const std::string& v){ config.set_utf_16_le_enabled(v=="true"); }},
     };
     //initialize setting
@@ -382,6 +396,7 @@ int CLIParser::handleSettings(int argc, char *argv[]) {
                        << "  FileInSight -config compression {zstd, huffman}\n"
                        << "  FileInSight -config compLevel {1-22}\n"
                        << "  FileInSIght -config encryption {xor, aes}\n"
+                       << "  FileInSIght -config keyDerivation 10^{0-6}\n"
                        << "  FileInSight -config enable_utf16 {true, false}\n";
     return 1;
 }
