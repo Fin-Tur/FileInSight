@@ -54,6 +54,7 @@ bool AbstractCompressor::handleDecompress(const std::filesystem::path &src) {
     auto files = FileCollector::collect(src.string());
     if (files.empty()) {
         std::cerr << "[Error] Could not extract files!\n";
+        return false;
     }
     //Prepare threads
     int maxThreads = std::max(1u, std::thread::hardware_concurrency());
@@ -62,12 +63,17 @@ bool AbstractCompressor::handleDecompress(const std::filesystem::path &src) {
         std::string srcStr = fi.path.string();
         if (srcStr.size() < 5 or srcStr.substr(srcStr.size() -5) != ".fisc") {
             std::cerr << "[Error] Unexpected file fomat for decompression : " << srcStr << "\n";
+            return false;
         }else {
             const std::filesystem::path dstPath = srcStr.substr(0, srcStr.size() -5);
             if (this->decompress(srcStr, dstPath)) {
                 std::filesystem::remove(srcStr);
+            }else {
+                std::cerr << "[Error] Could not decompress files!\n";
+                return false;
             }
         }
+        return true;
     };
 
     //Start threads

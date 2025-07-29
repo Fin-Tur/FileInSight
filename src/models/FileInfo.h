@@ -9,7 +9,7 @@
 
 struct FileInfo {
     std::filesystem::path path;
-    std::uintmax_t size;
+    size_t size;
     std::string hash;
     int lastUsed = -1; // in days
     double entropy = -1;

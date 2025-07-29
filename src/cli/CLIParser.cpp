@@ -24,6 +24,7 @@
 #include "../steganography/forensics/RawRecoveryScanner.h"
 #include "compression/HuffmanCompressor.h"
 #include "config/Settings.h"
+#include "container/VaultManager.h"
 #include "steganography/AESEncryptor.h"
 
 Settings CLIParser::config;
@@ -43,6 +44,8 @@ void CLIParser::printHelp() {
             << "  FileInSight -info <file> : Displays File info\n"
             << "  FileInSight -path <path> : Displays Path info\n"
             << "  FileInSight -recover <raw dump> : Recovers files from Raw dump\n"
+            << "  FileInSight -vault <dir> <name> : Creates vault file named <name> for <dir>\n"
+            << "  FileInSight -dissolve <vault> <dst>: Dissolves vault file into seperate files at <dst>\n"
             << "  FileInSight -config <param/display> <value> : Edits/Accesses Settings\n";
 }
 
@@ -155,6 +158,20 @@ int CLIParser::run(int argc, char *argv[]) {
                 return 1;
             }
             return CLIParser::handleSettings(argc, argv);
+        }},
+        {"-vault", [](int argc, char* argv[]) -> int {
+            if (argc != 4) {
+                std::cerr << "[Error] Usage: -vault <dir> <name>\n";
+                return 1;
+            }
+            return CLIParser::handleVaultCreation(argv[2], argv[3]);
+        }},
+        {"-dissolve", [](int argc, char* argv[]) -> int {
+            if (argc != 4) {
+                std::cerr << "[Error] Usage: -dissolve <vault> <dst>\n";
+                return 1;
+            }
+            return CLIParser::handleVaultDissolve(argv[2], argv[3]);
         }}
 
     };
@@ -370,6 +387,24 @@ int CLIParser::handleRecovery(const std::string &path) {
     ifs.close();
     return 0;
 }
+
+int CLIParser::handleVaultCreation(const std::string &path, const std::string& name) {
+    if (VaultManager::createVault(path, name)) {
+        std::cout << "[Info] Vault creation successful!\n";
+        return true;
+    }
+    return false;
+}
+
+int CLIParser::handleVaultDissolve(const std::string &path, const std::string &dst) {
+    if (VaultManager::dissolveVault(path, dst)) {
+        std::cout << "[Info] Vault dissolve successful!\n";
+        return true;
+    }
+    return false;
+}
+
+
 
 int CLIParser::handleSettings(int argc, char *argv[]) {
     //Create dispatch funcs map

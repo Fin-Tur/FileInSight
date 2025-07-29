@@ -61,6 +61,8 @@ add_executable(FileInSight
         src/steganography/AbstractEncryptor.h
         src/steganography/AbstractEncryptor.cpp
         src/compression/AbstractCompressor.cpp
+        src/container/VaultManager.cpp
+        src/container/VaultManager.h
 
 )
 
