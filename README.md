@@ -41,12 +41,14 @@ It combines multiple features such as compression, encryption, file recovery, du
 
 - **Commands**
 
- <img width="929" height="313" alt="Screenshot 2025-07-25 112752" src="https://github.com/user-attachments/assets/f20a7370-42d9-4914-a8b6-13eafba8ba9f" />
+ 
+<img width="923" height="346" alt="Screenshot 2025-07-29 173854" src="https://github.com/user-attachments/assets/5e62cef2-6651-40c0-95d3-5d20a2378c66" />
 
 
 - **Config**
 
- <img width="392" height="128" alt="Screenshot 2025-07-25 112722" src="https://github.com/user-attachments/assets/13b4c7ea-3256-4fb2-a6b6-a54acb4d16e9" />
+
+<img width="576" height="133" alt="Screenshot 2025-07-29 173918" src="https://github.com/user-attachments/assets/57d3e0fa-7925-4f35-a11e-9e8bf010a7b4" />
 
 
 - **Dupes**
