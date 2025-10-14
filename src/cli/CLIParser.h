@@ -9,7 +9,7 @@
 #include <set>
 #include <string>
 
-#include "config/Settings.h"
+#include "../config/Settings.h"
 
 
 class CLIParser {

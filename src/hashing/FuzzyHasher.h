@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <optional>
 
-#include "tlsh.h"
+#include "../thirdparty/fuzzyhashLib/tlsh.h"
 #include <string>
 #include <vector>
 

@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "models/FileInfo.h"
+#include "../models/FileInfo.h"
 
 const std::vector<uint8_t> vaultSignature = {'F', 'I', 'S', 'V'};
 

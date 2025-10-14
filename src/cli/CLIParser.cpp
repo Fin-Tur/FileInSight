@@ -22,10 +22,10 @@
 #include "../analyzer/FileAnalyzer.h"
 #include "../analyzer/PathAnalyzer.h"
 #include "../steganography/forensics/RawRecoveryScanner.h"
-#include "compression/HuffmanCompressor.h"
-#include "config/Settings.h"
-#include "container/VaultManager.h"
-#include "steganography/AESEncryptor.h"
+#include "../compression/HuffmanCompressor.h"
+#include "../config/Settings.h"
+#include "../container/VaultManager.h"
+#include "../steganography/AESEncryptor.h"
 
 Settings CLIParser::config;
 
