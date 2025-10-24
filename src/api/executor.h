@@ -8,16 +8,13 @@
 #include <vector>
 
 
-class executor {
-    public:
-
-    static int compress(std::string& path, int compLvl);
-    static int decompress(std::string& path);
-
-    static int encrypt(const std::string& path, std::string& password, int iter);
-    static int decrypt(const std::string& path, std::string& password, int iter);
-
-    static int dupes_existing_for_file(const std::string& path, const std::string& file);
+namespace executor {
+     int compress(std::string& path, int compLvl);
+     int decompress(std::string& path);
+     int encrypt(const std::string& path, std::string& password, int iter);
+     int decrypt(const std::string& path, std::string& password, int iter);
+     int dupes_existing_for_file(const std::string& path, const std::string& file);
+     double entropy_for_file(const std::string& path);
 
 
 

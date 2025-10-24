@@ -9,26 +9,31 @@
 #include "../core/FileCollecter.h"
 #include "../finder/DuplicateFinder.h"
 #include "../models/FileInfo.h"
+#include "analyzer/EntropyAnalyzer.h"
 
 
 int executor::compress(std::string &path, int compLvl) {
     auto comp = zstdCompressor();
-    return comp.compress(path, path, compLvl);
+    if (comp.compress(path, path, compLvl)) return 0;
+    return 1;
 }
 
 int executor::decompress(std::string &path) {
     auto comp = zstdCompressor();
-    return comp.decompress(path, path);
+    if (comp.decompress(path, path)) return 0;
+    return 1;
 }
 
 int executor::encrypt(const std::string &path, std::string& password, int iterations) {
     std::unique_ptr<AbstractEncryptor> enc = std::make_unique<AESEncryptor>();
-    return enc->handleEncryption(path, password, iterations);
+    if (enc->handleEncryption(path, password, iterations)) return 0;
+    return 1;
 }
 
 int executor::decrypt(const std::string &path, std::string& password, int iterations) {
     std::unique_ptr<AbstractEncryptor> enc = std::make_unique<AESEncryptor>();
-    return enc->handleDecryption(path, password, iterations);
+    if (enc->handleDecryption(path, password, iterations)) return 0;
+    return 1;
 }
 
 //0->No Doplicates, 1->Dupes existing to file, 2->Dupes existing in general
@@ -48,6 +53,11 @@ int executor::dupes_existing_for_file(const std::string &path, const std::string
     if (!groups.empty()) return 2;
     return 0;
 }
+
+double executor::entropy_for_file(const std::string &path) {
+    return EntropyAnalyzer::analyze(path);
+}
+
 
 
 

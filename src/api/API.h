@@ -12,12 +12,12 @@
 extern "C" {
 #endif
 
-    FIS_API int compress(const char* path, int compLvl);
-    FIS_API int decompress(const char* path);
-    FIS_API int encrypt(const char* path, const char* password, int iter);
-    FIS_API int decrypt(const char* path, const char* password, int iter);
-    //0->No Duplicates, 1->Dupes existing to file, 2->Dupes existing in general
-    FIS_API int dupes_existing_for_file(const char* dir_path, const char* file_path);
+    FIS_API int fis_compress(const char* path, int compLvl);
+    FIS_API int fis_decompress(const char* path);
+    FIS_API int fis_encrypt(const char* path, const char* password, int iter);
+    FIS_API int fis_decrypt(const char* path, const char* password, int iter);
+    FIS_API int fis_dupes_existing_for_file(const char* dir_path, const char* file_path);
+    FIS_API double fis_entropy_for_file(const char* path);
 
 
 #ifdef __cplusplus
