@@ -3,6 +3,7 @@
 
 **FileInSight** is a file management and forensic analysis tool implemented in modern C++.  
 It combines multiple features such as compression, encryption, file recovery, duplicate scanning, similarity detection, and more – all in one CLI application.
+Library build is also possible, so extern use (as .dll or .so) is also possible.
 
 ## 🔧 Features
 
