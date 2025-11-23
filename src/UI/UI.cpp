@@ -1,8 +1,5 @@
-//
-// Created by Admin on 21.07.2025.
-//
-#include "UI.h"
 
+#include "UI.h"
 
 std::string UI::convertBytes(std::size_t bytes) {
     if (bytes < 1024) {

@@ -1,7 +1,3 @@
-//
-// Created by Admin on 26.07.2025.
-//
-
 #include "AbstractCompressor.h"
 
 #include <deque>

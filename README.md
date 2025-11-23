@@ -4,7 +4,7 @@
 **FileInSight** is a file management and forensic analysis tool implemented in modern C++.  
 It combines multiple features such as compression, encryption, file recovery, duplicate scanning, similarity detection, and more – all in one CLI application.
 
-## 🔧 Features
+## Features
 
 - 🔍 **File Analytics**
   - Entropy analysis
@@ -22,7 +22,7 @@ It combines multiple features such as compression, encryption, file recovery, du
   - Zstandard (zstd) for professional Compression
 
 - 🔐 **Encryption**
-  - Simple XOR-based Encryption w/salt (Learning) experience
+  - Simple XOR-based Encryption | Disclaimer: XOR encryption is included for educational purposes only. 
   - Safe AES encryption for real world use
 
 - 🧰 **Recovery-Function**
@@ -58,14 +58,12 @@ It combines multiple features such as compression, encryption, file recovery, du
 
 ---
 
-## 🚀 Build-Instructions
-
-### 🔨 Needs
+### Needs
 
 - C++17-compatible Compiler (tested on GCC 13.1.0 and MinGW 11.0 w64)
 - `CMake` ≥ 3.15
 
-### ⚙️ Compiling
+### Compiling
 
 ```bash
 git clone https://github.com/Fin-Tur/fileinsight.git

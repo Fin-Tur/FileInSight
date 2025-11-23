@@ -1,9 +1,5 @@
-//
-// Created by Admin on 13.07.2025.
-//
 
-#ifndef CLIPARSER_H
-#define CLIPARSER_H
+#pragma once
 #include <functional>
 #include <map>
 #include <set>
@@ -39,5 +35,3 @@ private:
 };
 
 
-
-#endif //CLIPARSER_H

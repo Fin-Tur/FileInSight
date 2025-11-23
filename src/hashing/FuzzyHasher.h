@@ -1,10 +1,4 @@
-//
-// Created by Admin on 11.07.2025.
-//
-
-#ifndef FUZZYHASHER_H
-#define FUZZYHASHER_H
-
+#pragma once
 #include <cstdint>
 #include <optional>
 
@@ -14,19 +8,14 @@
 
 struct FileInfo;
 
-class FuzzyHasher {
-    private:
+namespace FuzzyHasher {
     //Computes Fuzzy Hash
-    static std::string computeFuzzyHash(const FileInfo& file);
-    public:
+    [[nodiscard]] static std::string computeFuzzyHash(const FileInfo& file);
     //Checks for similarities in two Files
     static bool areFilesSimilar(const FileInfo& file1, const FileInfo& file2, const std::uint8_t& cutOff = 45);
     //Checks group of files for similarities to a file
-    static std::optional<std::vector<FileInfo>> findSimilarities(const FileInfo& referenceFile, const std::vector<FileInfo>& files, const std::uint8_t& cutOff = 35);
+    [[nodiscard]] static std::optional<std::vector<FileInfo>> findSimilarities(const FileInfo& referenceFile, const std::vector<FileInfo>& files, const std::uint8_t& cutOff = 35);
 
 
 };
 
-
-
-#endif //FUZZYHASHER_H

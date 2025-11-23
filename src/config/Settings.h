@@ -1,9 +1,4 @@
-//
-// Created by Admin on 24.07.2025.
-//
-
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#pragma once
 
 #include "../thirdparty/json/json.hpp"
 
@@ -14,12 +9,11 @@ public:
     void setConfig();
     void printSettings() const;
 
-    [[nodiscard]] std::string getCompression() const {return this->compression;}
-    [[nodiscard]] uint8_t getCompLevel() const {return this->compressionLevel;}
-    [[nodiscard]] std::string getEncryption() const {return this->encryption;}
-    [[nodiscard]] int getkeyDerivation() const {return this->keyDerivationIterations;}
-    [[nodiscard]] bool get_utf_16_le_enabled() const {return this->utf_16_le_enabled;}
-
+    [[nodiscard]] std::string getCompression() const noexcept {return this->compression;}
+    [[nodiscard]] uint8_t getCompLevel() const noexcept {return this->compressionLevel;}
+    [[nodiscard]] std::string getEncryption() const noexcept {return this->encryption;}
+    [[nodiscard]] int getkeyDerivation() const noexcept {return this->keyDerivationIterations;}
+    [[nodiscard]] bool get_utf_16_le_enabled() const noexcept {return this->utf_16_le_enabled;}
     void setCompression(const std::string& compression) {this->compression = compression;}
     void setCompLevel(uint8_t compLevel) {this->compressionLevel = compLevel;}
     void setEncryption(const std::string& encryption) {this->encryption = encryption;}
@@ -45,5 +39,3 @@ private:
 };
 
 
-
-#endif //SETTINGS_H

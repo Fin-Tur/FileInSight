@@ -1,6 +1,3 @@
-//
-// Created by Admin on 24.07.2025.
-//
 
 #include "Settings.h"
 #include <fstream>

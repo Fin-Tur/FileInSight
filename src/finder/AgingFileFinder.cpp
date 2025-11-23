@@ -1,6 +1,3 @@
-//
-// Created by Admin on 05.07.2025.
-//
 
 #include "AgingFileFinder.h"
 

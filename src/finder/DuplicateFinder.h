@@ -1,6 +1,4 @@
-#ifndef DUPLICATEFINDER_H
-#define DUPLICATEFINDER_H
-
+#pragma once
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -51,10 +49,8 @@ public:
     void deleteDuplicates(std::vector<FileInfo>& duplicates);
 
     // Checks if file is protected (by path or extension)
-    static bool isProtected(const std::filesystem::path& pathStr);
+    static bool isProtected (const std::filesystem::path& pathStr) noexcept ;
 
     // Computes hashes in parallel
     void computeHashesParallel(std::vector<FileInfo>& files);
 };
-
-#endif // DUPLICATEFINDER_H

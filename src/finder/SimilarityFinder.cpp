@@ -1,6 +1,3 @@
-//
-// Created by Admin on 11.07.2025.
-//
 
 #include "SimilarityFinder.h"
 
@@ -16,9 +13,7 @@ SimilarityFinder::SimilarityFinder(const std::string &referencePath, const std::
 }
 
 std::vector<std::vector<FileInfo>> SimilarityFinder::find() {
-    /*
-    std::cout << "[Debug] Called findSimilarities for: " << this->referenceFiles[0].path << "\n";
-    */
+
     std::vector<std::vector<FileInfo>> res;
 
     for (const auto& ref : this->referenceFiles) {

@@ -1,11 +1,9 @@
-//
-// Created by Admin on 11.07.2025.
-//
 
 #include "FuzzyHasher.h"
 #include <fstream>
 #include <filesystem>
 #include <iostream>
+#include <string>
 #include <vector>
 
 #include "../models/FileInfo.h"

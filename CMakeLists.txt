@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
+#===Sources===
 set(FIS_SOURCES
         src/core/FileCollecter.cpp
         src/core/FileCollecter.h
@@ -61,7 +62,6 @@ set(FIS_SOURCES
         src/container/VaultManager.cpp
         src/container/VaultManager.h
         src/cli/CLIParser.cpp
-        src/cli/CLIParser.cpp
 )
 
 # === Haupt-Binary ===
@@ -92,6 +92,8 @@ add_library(FISDLL SHARED
         src/steganography/AbstractEncryptor.h
         src/steganography/AbstractEncryptor.cpp
         src/compression/AbstractCompressor.cpp
+        src/analyzer/EntropyAnalyzer.cpp
+        src/analyzer/EntropyAnalyzer.h
 
         src/api/executor.cpp
         src/api/executor.h
@@ -99,7 +101,7 @@ add_library(FISDLL SHARED
         src/api/API.h
 )
 target_compile_definitions(FISDLL PRIVATE FIS_BUILD_DLL)
-#Kleinere dll (9->2MB) not reached sections thrown away
+#smaller dll (9->2MB) not reached sections thrown away
 target_link_options(FISDLL PRIVATE -Wl,--gc-sections -s)
 
 # === Test-Binary ===
@@ -158,8 +160,6 @@ target_include_directories(FISDLL PRIVATE src src/thirdparty/zstd/zstd-dev/lib)
 
 
 # === Link Libraries ===
-#target_link_libraries(FileInSight PRIVATE libzstd_static tlsh)
-#target_link_libraries(test_runner PRIVATE libzstd_static tlsh)
 target_link_libraries(FileInSight PRIVATE zstd_static tlsh)
 target_link_libraries(test_runner PRIVATE zstd_static tlsh)
 target_link_libraries(FISDLL PRIVATE zstd_static tlsh)

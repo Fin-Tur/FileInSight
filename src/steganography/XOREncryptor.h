@@ -1,9 +1,4 @@
-//
-// Created by Admin on 15.07.2025.
-//
-
-#ifndef XORENCRYPTOR_H
-#define XORENCRYPTOR_H
+#pragma once
 #include <filesystem>
 #include <vector>
 
@@ -16,6 +11,3 @@ public:
     void decrypt(const std::string& src, const std::string& password, const size_t& iterations) override;
 };
 
-
-
-#endif //XORENCRYPTOR_H

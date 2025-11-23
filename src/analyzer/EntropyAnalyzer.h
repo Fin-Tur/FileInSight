@@ -1,17 +1,8 @@
-//
-// Created by Admin on 17.07.2025.
-//
-
-#ifndef ENTROPYANALYZER_H
-#define ENTROPYANALYZER_H
+#pragma once
 #include <string>
 
-
-class EntropyAnalyzer {
-public:
-    static double analyze(const std::string& src);
+namespace EntropyAnalyzer {
+    [[nodiscard]] double analyze(const std::string& src);
 };
 
 
-
-#endif //ENTROPYANALYZER_H

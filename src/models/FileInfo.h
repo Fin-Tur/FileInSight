@@ -1,9 +1,4 @@
-//
-// Created by Admin on 05.07.2025.
-//
-
-#ifndef FILEINFO_H
-#define FILEINFO_H
+#pragma once
 #include <cstdint>
 #include <filesystem>
 
@@ -15,4 +10,3 @@ struct FileInfo {
     double entropy = -1;
 };
 
-#endif //FILEINFO_H

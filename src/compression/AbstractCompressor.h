@@ -1,9 +1,6 @@
-//
-// Created by Admin on 10.07.2025.
-//
 
-#ifndef ABSTRACTCOMPRESSOR_H
-#define ABSTRACTCOMPRESSOR_H
+
+#pragma once
 #include <filesystem>
 
 class AbstractCompressor {
@@ -25,4 +22,4 @@ public:
     bool handleDecompress(const std::filesystem::path& src);
 };
 
-#endif //ABSTRACTCOMPRESSOR_H
+

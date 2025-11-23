@@ -1,6 +1,3 @@
-//
-// Created by Admin on 25.07.2025.
-//
 
 #include "AESEncryptor.h"
 
@@ -28,11 +25,11 @@ void AESEncryptor::deriveKeyFromPassword(const std::vector<uint8_t>& password, s
 void AESEncryptor::encrypt(const std::string &src, const std::string &password, const size_t& iterations) {
 
     //Initilize AES struct
-    AES_ctx ctx;
-    std::array<uint8_t, 32> key;
+    AES_ctx ctx{};
+    std::array<uint8_t, 32> key{};
 
     //Create random IV
-    std::array<uint8_t, 16> iv;
+    std::array<uint8_t, 16> iv{};
     std::random_device rd;
     std::mt19937 gen(rd());
     for (auto& byte : iv) {

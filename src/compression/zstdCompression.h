@@ -1,5 +1,4 @@
-#ifndef ZSTDCOMPRESSOR_H
-#define ZSTDCOMPRESSOR_H
+#pragma once
 
 #include <filesystem>
 #include "AbstractCompressor.h"
@@ -11,4 +10,3 @@ public:
     bool decompress(const std::filesystem::path& src, const std::filesystem::path& dst) override;
 };
 
-#endif // ZSTDCOMPRESSOR_H

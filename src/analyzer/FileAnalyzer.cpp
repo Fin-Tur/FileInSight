@@ -1,6 +1,4 @@
-//
-// Created by Admin on 18.07.2025.
-//
+
 
 #include <filesystem>
 #include <iostream>

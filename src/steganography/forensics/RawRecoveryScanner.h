@@ -1,9 +1,4 @@
-//
-// Created by Admin on 18.07.2025.
-//
-
-#ifndef RAWRECOVERYSCANNER_H
-#define RAWRECOVERYSCANNER_H
+#pragma once
 
 #include "../../models/FileSignature.h"
 #include "../../models/RecoveredFile.h"
@@ -51,7 +46,7 @@ inline std::vector<FileSignature> knownSignatures = {
 
 class RawRecoveryScanner {
 public:
-    RawRecoveryScanner(const bool& enable_UTF16LE);
+    explicit RawRecoveryScanner(const bool& enable_UTF16LE);
     void scan(std::ifstream& ifs);
     void extractFiles(std::ifstream& ifs, const std::string& outputDir) const;
     static void addUTF16LESignatures();
@@ -60,6 +55,3 @@ private:
     std::vector<RecoveredFile> extractedFiles;
 };
 
-
-
-#endif //RAWRECOVERYSCANNER_H

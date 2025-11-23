@@ -1,6 +1,3 @@
-//
-// Created by Admin on 04.07.2025.
-//
 
 #include "RegExFinder.h"
 

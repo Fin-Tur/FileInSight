@@ -1,9 +1,4 @@
-//
-// Created by Admin on 16.07.2025.
-//
-
-#ifndef PATHANALYZER_H
-#define PATHANALYZER_H
+#pragma once
 #include <filesystem>
 #include <unordered_map>
 #include <vector>
@@ -15,7 +10,7 @@ class PathAnalyzer {
 public:
     explicit PathAnalyzer(const std::string& path) : path(path), files(FileCollector::collect(path)) {};
     void analyze();
-    void printAnalytics() const;
+    void printAnalytics() const noexcept;
 
 private:
     std::filesystem::path path;
@@ -27,5 +22,3 @@ private:
 };
 
 
-
-#endif //PATHANALYZER_H

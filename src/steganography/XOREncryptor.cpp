@@ -1,6 +1,3 @@
-//
-// Created by Admin on 15.07.2025.
-//
 
 #include "XOREncryptor.h"
 #include "../hashing/picosha2.h"

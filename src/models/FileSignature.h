@@ -1,9 +1,4 @@
-//
-// Created by Admin on 18.07.2025.
-//
-
-#ifndef FILESIGNATURE_H
-#define FILESIGNATURE_H
+#pragma once
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -17,4 +12,3 @@ struct FileSignature {
 
 };
 
-#endif //FILESIGNATURE_H

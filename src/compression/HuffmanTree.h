@@ -1,9 +1,4 @@
-//
-// Created by Admin on 05.07.2025.
-//
-
-#ifndef HUFFMANTREE_H
-#define HUFFMANTREE_H
+#pragma once
 #include <iosfwd>
 #include <unordered_map>
 #include <queue>
@@ -19,7 +14,7 @@ public:
         Node* left = nullptr;
         Node* right = nullptr;
 
-        [[nodiscard]] bool isLeaf() const {
+        [[nodiscard]] bool isLeaf() const noexcept{
             return !left && !right;
         }
 
@@ -30,7 +25,7 @@ public:
     Node* root = nullptr;
 
     // Methods
-    [[nodiscard]] Node* getRoot() const { return root; }
+    [[nodiscard]] Node* getRoot() const noexcept{ return root; }
     void build(const std::unordered_map<unsigned char, int>& freqMap);
     void serialize(std::ostream& out) const;
     void serializeNode(Node* node, std::ostream& out) const;
@@ -44,5 +39,3 @@ public:
 
 
 
-
-#endif //HUFFMANTREE_H

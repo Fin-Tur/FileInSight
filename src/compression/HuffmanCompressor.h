@@ -1,9 +1,4 @@
-//
-// Created by Admin on 05.07.2025.
-//
-
-#ifndef HUFFMANCOMPRESSOR_H
-#define HUFFMANCOMPRESSOR_H
+#pragma once
 #include <filesystem>
 #include <fstream>
 
@@ -11,7 +6,7 @@
 #include "HuffmanTree.h"
 
 
-class HuffmanCompressor :public AbstractCompressor{
+class HuffmanCompressor final :public AbstractCompressor{
 public:
     bool compress(const std::filesystem::path& src, const std::filesystem::path& dst, int compressionLevel) override;
 
@@ -21,5 +16,3 @@ public:
 };
 
 
-
-#endif //HUFFMANCOMPRESSOR_H

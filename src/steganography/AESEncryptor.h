@@ -1,9 +1,4 @@
-//
-// Created by Admin on 25.07.2025.
-//
-
-#ifndef AESENCRYPTOR_H
-#define AESENCRYPTOR_H
+#pragma once
 #include <string>
 
 #include "AbstractEncryptor.h"
@@ -20,5 +15,3 @@ private:
 };
 
 
-
-#endif //AESENCRYPTOR_H

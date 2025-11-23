@@ -1,6 +1,3 @@
-//
-// Created by Admin on 10.07.2025.
-//
 
 #include "zstdCompression.h"
 #include <zstd.h>

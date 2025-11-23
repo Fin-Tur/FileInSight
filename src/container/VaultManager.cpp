@@ -1,6 +1,3 @@
-//
-// Created by Admin on 28.07.2025.
-//
 
 #include "VaultManager.h"
 
@@ -11,7 +8,7 @@
 #include "core/FileCollecter.h"
 #include "thirdparty/testing/catch_amalgamated.hpp"
 
-bool VaultManager::writeFile(const FileInfo &fi, std::ofstream &ofs) {
+bool VaultManager::detail::writeFile(const FileInfo &fi, std::ofstream &ofs) {
     //Look for errors
     if (!fi.size or fi.path.empty()) {
         return false;
@@ -45,7 +42,7 @@ bool VaultManager::writeFile(const FileInfo &fi, std::ofstream &ofs) {
     return ofs.good();
 }
 
-bool VaultManager::readFile(std::ifstream &ifs, const std::string &dst) {
+bool VaultManager::detail::readFile(std::ifstream &ifs, const std::string &dst) {
     //Prepare variables
     uint16_t fileNameSize;
     std::vector<uint8_t> fileName;
@@ -99,7 +96,7 @@ bool VaultManager::createVault(const std::string &dir, const std::string& name) 
     //Write file contents
     for (auto& file : files) {
         std::cout << "Writing file @ " << file.path << "With size " << file.size<<"\n";
-        if (!VaultManager::writeFile(file, ofs)) {
+        if (!VaultManager::detail::writeFile(file, ofs)) {
             std::cout << "[Error] Could not write file @ "<< file.path <<"\n";
         }
     }
@@ -132,7 +129,7 @@ bool VaultManager::dissolveVault(const std::string &path, const std::string &dst
 
     //Read Files
     for (uint16_t i = 0; i < fileCount; i++) {
-        if (!VaultManager::readFile(ifs, dst)) {
+        if (!VaultManager::detail::readFile(ifs, dst)) {
             std::cerr << "[Error] Could not read embedded file!\n";
         }
 

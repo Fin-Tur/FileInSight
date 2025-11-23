@@ -1,6 +1,4 @@
-//
-// Created by f.willems on 14.10.2025.
-//
+
 #pragma once
 
 #if defined(_WIN32)
