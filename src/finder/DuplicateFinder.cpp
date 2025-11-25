@@ -73,7 +73,7 @@ void DuplicateFinder::deleteDuplicates(std::vector<FileInfo> &duplicates) {
 }
 
 // Check if file is protected by path or extension
-bool DuplicateFinder::isProtected(const std::filesystem::path& pathStr){
+bool DuplicateFinder::isProtected(const std::filesystem::path& pathStr) noexcept {
     std::filesystem::path path = std::filesystem::weakly_canonical(std::filesystem::absolute(pathStr));
     path = path.lexically_normal();
 

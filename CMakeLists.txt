@@ -49,6 +49,7 @@ set(FIS_SOURCES
         src/steganography/forensics/RawRecoveryScanner.h
         src/models/FileSignature.h
         src/models/RecoveredFile.h
+        src/models/ExtFileInfo.h
         src/config/Settings.cpp
         src/config/Settings.h
         src/steganography/AESEncryptor.cpp
@@ -72,12 +73,16 @@ add_executable(FileInSight
 
 # === DLL - Target ===
 add_library(FISDLL SHARED
+        src/UI/UI.cpp
+        src/UI/UI.h
         src/core/FileCollecter.cpp
         src/core/FileCollecter.h
         src/finder/DuplicateFinder.cpp
         src/finder/DuplicateFinder.h
         src/hashing/Hasher.cpp
         src/hashing/Hasher.h
+        src/hashing/FuzzyHasher.cpp
+        src/hashing/FuzzyHasher.h
         src/hashing/picosha2.h
         src/finder/AbstractFinder.h
         src/models/FileInfo.h
@@ -94,6 +99,12 @@ add_library(FISDLL SHARED
         src/compression/AbstractCompressor.cpp
         src/analyzer/EntropyAnalyzer.cpp
         src/analyzer/EntropyAnalyzer.h
+        src/analyzer/FileAnalyzer.cpp
+        src/analyzer/FileAnalyzer.h
+        src/analyzer/MagicByteAnalyzer.cpp
+        src/analyzer/MagicByteAnalyzer.h
+        src/hashing/Hasher.cpp
+        src/hashing/Hasher.h
 
         src/api/executor.cpp
         src/api/executor.h

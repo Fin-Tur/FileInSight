@@ -3,6 +3,5 @@
 #include <string>
 
 namespace UI {
-
-    static std::string convertBytes(std::size_t bytes);
+     std::string convertBytes(std::size_t bytes);
 };

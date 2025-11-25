@@ -1,14 +1,12 @@
-//
-// Created by f.willems on 14.10.2025.
-//
 
 #include "API.h"
 
 #include <cstring>
 
 #include "executor.h"
+#include "../analyzer/FileAnalyzer.h"
 
-//
+
 int fis_compress(const char* path, int compLvl) {
     if (!path || compLvl == 0) return 2;
     std::string strPath = path;
@@ -71,6 +69,26 @@ double fis_entropy_for_file(const char *path) {
         return executor::entropy_for_file(strPath);
     }catch (...) {
         return -2;
+    }
+}
+
+// 0 -> Sucess, 1 -> Fail, 2 -> File not found
+int fis_analyze_extended(const char* path, FIS_ExtFileInfo* file_info){
+    if(!path || !file_info) return 1;
+    std::string pathStr = std::string(path);
+    try{
+        auto ext_inf_opt = FileAnalyzer::analyzeExtended(pathStr);
+        if (!ext_inf_opt.has_value()) return 2;
+        auto ext_inf = ext_inf_opt.value();
+        file_info->size = ext_inf.size;
+        file_info->entropy = ext_inf.entropy;
+        file_info->flagged = ext_inf.flagged ? 1 : 0;
+        file_info->last_used_days = ext_inf.last_used_days;
+        std::strncpy(file_info->tlsh_hash, ext_inf.tlsh_hash.c_str(), 255);
+        std::strncpy(file_info->type, ext_inf.type.c_str(), 63);
+        return 0;
+    }catch(...){
+        return 1;
     }
 }
 

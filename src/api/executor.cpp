@@ -7,6 +7,9 @@
 #include "../finder/DuplicateFinder.h"
 #include "../models/FileInfo.h"
 #include "analyzer/EntropyAnalyzer.h"
+#include "API.h"
+#include <analyzer/FileAnalyzer.h>
+#include <cstring>
 
 //0 -> Sucess, 1 -> Failure
 int executor::compress(std::string &path, int compLvl) {

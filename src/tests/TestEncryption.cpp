@@ -28,7 +28,8 @@ TEST_CASE("XOR En/De-cryption test succesful", "[encryption]") {
     ifs.read(reinterpret_cast<char*>(bufferBefore.data()), originalSize);
     ifs.close();
     //encrypt file
-    XOREncryptor::encrypt(src, "test");
+    XOREncryptor encryptor;
+    encryptor.encrypt(src.string(), "test", 1);
     //Open encrypted file
     std::ifstream ifsEncrypted(src, std::ios::binary);
     //gather encrypted file size
@@ -40,7 +41,7 @@ TEST_CASE("XOR En/De-cryption test succesful", "[encryption]") {
     ifsEncrypted.read(reinterpret_cast<char*>(encryptedBuffer.data()), encryptedSize);
     ifsEncrypted.close();
     //Decrypt file
-    XOREncryptor::decrypt(src, "test");
+    encryptor.decrypt(src.string(), "test", 1);
     //Read aftermath
     std::ifstream ifsDecrypted(src, std::ios::binary);
     //gather after size

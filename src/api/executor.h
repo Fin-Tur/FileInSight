@@ -11,6 +11,4 @@ namespace executor {
      int dupes_existing_for_file(const std::string& path, const std::string& file);
      double entropy_for_file(const std::string& path);
 
-
-
 };

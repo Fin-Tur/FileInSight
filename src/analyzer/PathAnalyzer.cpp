@@ -24,7 +24,7 @@ void PathAnalyzer::analyze() {
 
 }
 
-void PathAnalyzer::printAnalytics() const {
+void PathAnalyzer::printAnalytics() const noexcept {
 
     std::vector<std::pair<std::filesystem::path, size_t>> sortedFileTypSizes(this->fileTypeSizes.begin(), this->fileTypeSizes.end());
     std::sort(sortedFileTypSizes.begin(), sortedFileTypSizes.end(), [](const auto& a, const auto& b) {

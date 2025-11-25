@@ -21,7 +21,7 @@ TEST_CASE("HuffmanCompression test successfull!", "[compression]"){
     //Handle Compressor
     HuffmanCompressor compressor;
 
-    compressor.compress(inputFile, compressedFile);
+    compressor.compress(inputFile, compressedFile, 1);
     compressor.decompress(compressedFile, decompressedFile);
 
     //Check similarity

@@ -11,7 +11,7 @@
 //Collects files from directory recursively
 namespace FileCollector {
 
-    [[nodiscard]] static std::vector<FileInfo> collect(const std::string& path);
+    [[nodiscard]] std::vector<FileInfo> collect(const std::string& path);
     static bool isPathBlacklisted(const std::string& path);
 
     //BlackListing secured Paths
