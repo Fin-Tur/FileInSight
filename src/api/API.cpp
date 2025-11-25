@@ -5,6 +5,7 @@
 
 #include "executor.h"
 #include "../analyzer/FileAnalyzer.h"
+#include <analyzer/MagicByteAnalyzer.h>
 
 
 int fis_compress(const char* path, int compLvl) {
@@ -89,6 +90,16 @@ int fis_analyze_extended(const char* path, FIS_ExtFileInfo* file_info){
         return 0;
     }catch(...){
         return 1;
+    }
+}
+
+// -1 -> Invalid input, 0 -> Not flagged, 1 -> Flagged, 2 -> Error  
+int fis_file_check_flag_bytes(const unsigned char* data, size_t data_size, const char* expected_type) {
+    if (!data || data_size == 0 || !expected_type) return -1;
+    try {
+        return MagicByteAnalyzer::checkFlagBytes(data, data_size, expected_type);
+    } catch (...) {
+        return 2;
     }
 }
 

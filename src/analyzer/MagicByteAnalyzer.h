@@ -24,6 +24,8 @@ namespace MagicByteAnalyzer {
 [[nodiscard]] std::vector<std::pair<FileInfo, std::string>> analyzePath(const std::string& path);
 //Analyze File
 [[nodiscard]] std::optional<std::pair<FileInfo, std::string>> analyzeFile(const std::filesystem::path& path);
+//Check raw bytes for flagged signatures
+[[nodiscard]] bool checkFlagBytes(const unsigned char* data, const size_t data_size, std::string expected_type) noexcept;
 
 };
 

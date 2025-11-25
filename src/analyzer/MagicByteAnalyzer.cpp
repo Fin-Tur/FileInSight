@@ -39,7 +39,7 @@ std::optional<std::pair<FileInfo, std::string>> MagicByteAnalyzer::analyzeFile(c
         if (ss.str().starts_with(signature)) {
             std::string extension = std::filesystem::path(path).extension().string();
             if (!extension.empty() && extension[0] == '.') {
-                extension = extension.substr(1); // remove dot
+                extension = extension.substr(1);
             }
             std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
             if (filetype != extension) {
@@ -65,4 +65,23 @@ std::vector<std::pair<FileInfo, std::string> > MagicByteAnalyzer::analyzePath(co
         }
     }
     return flaggedFiles;
+}
+
+bool MagicByteAnalyzer::checkFlagBytes(const unsigned char* data, const size_t data_size, std::string expected_type) noexcept {
+    try {
+        std::transform(expected_type.begin(), expected_type.end(), expected_type.begin(), ::tolower);
+        std::stringstream ss;
+        for (size_t i = 0; i < std::min(data_size, static_cast<size_t>(8)); ++i) {
+            ss << std::hex << std::uppercase << std::setw(2) << std::setfill('0') << static_cast<int>(data[i]);
+        }
+        std::string hex_string = ss.str();
+        for (auto& [signature, filetype] : byteSignatures) {
+            if (hex_string.starts_with(signature)) {
+                if(expected_type != filetype) return true;
+            }
+        }
+        return false;
+    } catch (...) {
+        return false;
+    }
 }

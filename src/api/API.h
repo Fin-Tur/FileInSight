@@ -26,6 +26,7 @@ extern "C" {
     FIS_API int fis_dupes_existing_for_file(const char* dir_path, const char* file_path);
     FIS_API double fis_entropy_for_file(const char* path);
     FIS_API int fis_analyze_extended(const char* path, FIS_ExtFileInfo* file_info);
+    FIS_API int fis_file_check_flag_bytes(const unsigned char* data, size_t data_size, const char* expected_type);
     
 
 
