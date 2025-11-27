@@ -44,7 +44,7 @@ void CLIParser::printHelp() {
             << "  FileInSight -recover <raw dump> : Recovers files from Raw dump\n"
             << "  FileInSight -vault <dir> <name> : Creates vault file named <name> for <dir>\n"
             << "  FileInSight -dissolve <vault> <dst>: Dissolves vault file into seperate files at <dst>\n"
-            << "  FileInSight -config <param/display> <value> : Edits/Accesses Settings\n";
+            << "  FileInSight -config <param/display> <value> : Edits/Accesses Settings\n AAAs";
 }
 
 
@@ -247,7 +247,7 @@ int CLIParser::handleFind(const std::string &path, const std::string &pattern) {
     }
 
     for (auto& match : matches) {
-        std::cout << "  -> " << path << ":\n";
+        std::cout << "  -> " << match.path.lexically_normal().string() << "\n";
     }
     return 0;
 }
@@ -261,7 +261,7 @@ int CLIParser::handleDefine(const std::string &path) {
     }
     std::cout << "\n[Info] Found suspicious file/s!\n";
     for (const auto& [file, extension] : flaggedFiles) {
-        std::cout << "  -> FlaggedFile: " << file.path.string() << " was flagged as a " << extension <<" file!\n";
+        std::cout << "  -> FlaggedFile: " << file.path.lexically_normal().string() << " was flagged as a " << extension <<" file!\n";
     }
     return 0;
 }
