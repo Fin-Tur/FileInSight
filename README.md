@@ -7,33 +7,33 @@ Library build is also possible, so extern use (as .dll or .so) is also possible.
 
 ## Features
 
-- 🔍 **File Analytics**
+-  **File Analytics**
   - Entropy analysis
   - Magic-Byte-Scanner to identify file types
   - Path analyzing
   - Age finder (last used > x days ago)
 
-- 🧠 **Similarity and Duplicate Finder**
+-  **Similarity and Duplicate Finder**
   - Hashing-based Duplicate Scanner
   - **TLSH** (Trend Micro Locality Sensitive Hashing) for fuzzy Similarity Detection
   - Comparison of Hashes, Entropy, Filenames etc.
 
-- 📦 **Compression**
+-  **Compression**
   - Huffman-Compression (implementated w/o libraries)
   - Zstandard (zstd) for professional Compression
 
-- 🔐 **Encryption**
+-  **Encryption**
   - Simple XOR-based Encryption | Disclaimer: XOR encryption is included for educational purposes only. 
   - Safe AES encryption for real world use
 
-- 🧰 **Recovery-Function**
+-  **Recovery-Function**
   - File Recovery on .bin and .raw dumps using Magic Bytes (e.g. `.png`, `.zip`)
 
-- 🖥 **Simple Usage**
+-  **Simple Usage**
   - Command-Line-Interface for all functions
   - Easily adjustable Settings (compression method and level, encryption method etc.)
 
-- 🧪 **Testing**
+-  **Testing**
   - Catch2 unit testing framework integrated
 
 ---
