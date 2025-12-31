@@ -132,6 +132,7 @@ add_library(tlsh STATIC
 )
 
 target_include_directories(tlsh PUBLIC src/thirdparty/fuzzyhashLib)
+set_target_properties(tlsh PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 
 # === ZSTD aus Source bauen ===
@@ -156,6 +157,7 @@ add_library(zstd_static STATIC
 )
 
 target_compile_definitions(zstd_static PUBLIC ZSTD_DISABLE_ASM)
+set_target_properties(zstd_static PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(zstd_static PUBLIC
         ${CMAKE_SOURCE_DIR}/src/thirdparty/zstd/zstd-dev/lib

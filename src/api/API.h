@@ -3,6 +3,8 @@
 
 #if defined(_WIN32)
     #define FIS_API __declspec(dllexport)
+#else
+    #define FIS_API __attribute__((visibility("default")))
 #endif
 #include <string>
 
