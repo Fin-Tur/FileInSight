@@ -30,6 +30,7 @@ private:
     static int handleRecovery(const std::string& path);
     static int handleVaultCreation(const std::string& path, const std::string& name);
     static int handleVaultDissolve(const std::string& path, const std::string& dst);
+    static int handleHash(const std::string& path);
 
     static int handleSettings(int argc, char* arg[]);
 };

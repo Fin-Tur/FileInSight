@@ -31,3 +31,7 @@ std::string Hasher::computeHash(const FileInfo& file, bool trueHash) {
     }
 }
 
+std::string Hasher::computeHashNonFile(const std::string& chars) {
+    return picosha2::hash256_hex_string(chars.begin(), chars.end());
+}
+

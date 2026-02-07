@@ -24,6 +24,7 @@
 #include "../config/Settings.h"
 #include "../container/VaultManager.h"
 #include "../steganography/AESEncryptor.h"
+#include "../hashing/Hasher.h"
 
 Settings CLIParser::config;
 
@@ -44,7 +45,9 @@ void CLIParser::printHelp() {
             << "  FileInSight -recover <raw dump> : Recovers files from Raw dump\n"
             << "  FileInSight -vault <dir> <name> : Creates vault file named <name> for <dir>\n"
             << "  FileInSight -dissolve <vault> <dst>: Dissolves vault file into seperate files at <dst>\n"
-            << "  FileInSight -config <param/display> <value> : Edits/Accesses Settings\n AAAs";
+            << "  FileInSight -config <param/display> <value> : Edits/Accesses Settings\n"
+            << "  FileInSight -hash <file/string> : Computes SHA-256 hash of file or string\n"
+            << "  FileInSight -help : Displays this help message\n";
 }
 
 
@@ -170,7 +173,14 @@ int CLIParser::run(int argc, char *argv[]) {
                 return 1;
             }
             return CLIParser::handleVaultDissolve(argv[2], argv[3]);
-        }}
+        }},
+        {"-hash", [](int argc, char* argv[]) -> int {
+            if (argc != 3) {
+                std::cerr << "[Error] Usage: -hash <file/string>\n";
+                return 1;
+            }
+            return CLIParser::handleHash(argv[2]);
+        }},
 
     };
 
@@ -389,19 +399,38 @@ int CLIParser::handleRecovery(const std::string &path) {
 int CLIParser::handleVaultCreation(const std::string &path, const std::string& name) {
     if (VaultManager::createVault(path, name)) {
         std::cout << "[Info] Vault creation successful!\n";
-        return true;
+        return 0;
     }
-    return false;
+    return 1;
 }
 
 int CLIParser::handleVaultDissolve(const std::string &path, const std::string &dst) {
     if (VaultManager::dissolveVault(path, dst)) {
         std::cout << "[Info] Vault dissolve successful!\n";
-        return true;
+        return 0;
     }
-    return false;
+    return 1;
 }
 
+int CLIParser::handleHash(const std::string& chars){
+    std::string hash;
+    if(std::filesystem::exists(chars)) {
+        std::vector<FileInfo> fileInfo = FileCollector::collect(chars);
+        if(fileInfo.size() != 1) {
+            std::cerr << "[Error] Path must be a singular file and readable!\n";
+            return 1;
+        }
+        hash = Hasher::computeHash(fileInfo[0], true);
+    }
+    hash = Hasher::computeHashNonFile(chars);
+    if(hash.empty()) {
+        std::cerr << "[Error] Hashing failed!\n";
+        return 1;
+    }
+    std::cout << hash;
+    return 0;
+
+}
 
 
 int CLIParser::handleSettings(int argc, char *argv[]) {
