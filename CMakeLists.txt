@@ -172,10 +172,19 @@ target_include_directories(test_runner PRIVATE src src/thirdparty/zstd/zstd-dev/
 target_include_directories(FISDLL PRIVATE src src/thirdparty/zstd/zstd-dev/lib)
 
 
+#llama.cpp for embedding generation TODO: fis_embedder linking to llama, other targets linking to fis__embedder
+set(LLAMA_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(LLAMA_BUILD_TESTS    OFF CACHE BOOL "" FORCE)
+add_subdirectory(external/llama.cpp)
+target_include_directories(FileInSight PRIVATE external/llama.cpp/include)
+
+
 # === Link Libraries ===
-target_link_libraries(FileInSight PRIVATE zstd_static tlsh)
+target_link_libraries(FileInSight PRIVATE zstd_static tlsh llama)
 target_link_libraries(test_runner PRIVATE zstd_static tlsh)
 target_link_libraries(FISDLL PRIVATE zstd_static tlsh)
+
+
 
 
 
