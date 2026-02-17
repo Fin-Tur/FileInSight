@@ -63,6 +63,8 @@ set(FIS_SOURCES
         src/container/VaultManager.cpp
         src/container/VaultManager.h
         src/cli/CLIParser.cpp
+        src/semantic/embedding_generator.cpp
+        src/semantic/embedding_generator.h
 )
 
 # === Haupt-Binary ===
@@ -105,6 +107,8 @@ add_library(FISDLL SHARED
         src/analyzer/MagicByteAnalyzer.h
         src/hashing/Hasher.cpp
         src/hashing/Hasher.h
+        src/semantic/embedding_generator.h
+        src/semantic/embedding_generator.cpp
 
         src/api/executor.cpp
         src/api/executor.h
@@ -176,7 +180,9 @@ target_include_directories(FISDLL PRIVATE src src/thirdparty/zstd/zstd-dev/lib)
 set(LLAMA_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(LLAMA_BUILD_TESTS    OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/llama.cpp)
-target_include_directories(FileInSight PRIVATE external/llama.cpp/include)
+target_include_directories(FileInSight PRIVATE external/llama.cpp/include external/llama.cpp/ggml/include)
+target_include_directories(test_runner PRIVATE external/llama.cpp/include external/llama.cpp/ggml/include)
+target_include_directories(FISDLL PRIVATE external/llama.cpp/include external/llama.cpp/ggml/include)
 
 
 # === Link Libraries ===

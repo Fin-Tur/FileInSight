@@ -1,4 +1,6 @@
 #include "embedding_generator.h"
+#include <fstream>
+#include <models/semantic_info.h>
 
 embedding_generator::~embedding_generator() {
     if (ctx) llama_free(ctx);
@@ -54,4 +56,36 @@ bool embedding_generator::initialize(const std::string& model_path){
     llama_batch_free(batch);
     
     return result;
+}
+
+//TODO: overlapping chunks to ensure semantic meaning is kept across chunk boundaries
+sem::sem_info_file embedding_generator::chunk_text(const FileInfo& fi, size_t chunk_size){
+    std::ifstream file(fi.path);
+    if (!file.is_open()) {
+        return {};
+    }
+    size_t n_chunks = (fi.size + chunk_size - 1) / chunk_size;
+    std::vector<sem::sem_info_chunk> sems(n_chunks);
+    char* buffer = new char[chunk_size*n_chunks]; //Assuming 384 is the embedding size | allocated mem will be deleted in sem_info_file destructor
+    file.read(buffer, fi.size);
+    file.close();
+    for(size_t i = 0; i < n_chunks; ++i) {
+        sems[i] = (sem::sem_info_chunk{
+            .chunk = buffer + i * chunk_size,
+            .chunk_size = std::min(chunk_size, fi.size - i * chunk_size),
+            .embedding = {0}
+        });
+    }
+    return sem::sem_info_file{
+        .content = buffer,
+        .path = fi.path,
+        .size = fi.size,
+        .chunks = std::move(sems)
+    };
+}
+
+float cosine_similiarity(const sem::sem_info_chunk& c1, const sem::sem_info_chunk& c2, size_t n_dims){
+    float denom = sem::len(c1.embedding, n_dims) * sem::len(c2.embedding, n_dims);
+    if (denom == 0.0f) return 0.0f;
+    return sem::dot(c1.embedding, c2.embedding, n_dims) / denom;
 }
