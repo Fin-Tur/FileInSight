@@ -169,8 +169,11 @@ target_include_directories(zstd_static PUBLIC
         ${CMAKE_SOURCE_DIR}/src/thirdparty/zstd/zstd-dev/lib/dictBuilder
 )
 
+# SQLite
+add_library(sqlite3 STATIC src/thirdparty/sqlite/sqlite3.c)
 
 
+target_include_directories(sqlite3 PUBLIC src/thirdparty/sqlite)
 target_include_directories(FileInSight PRIVATE src src/thirdparty/zstd/zstd-dev/lib)
 target_include_directories(test_runner PRIVATE src src/thirdparty/zstd/zstd-dev/lib)
 target_include_directories(FISDLL PRIVATE src src/thirdparty/zstd/zstd-dev/lib)
@@ -186,9 +189,9 @@ target_include_directories(FISDLL PRIVATE external/llama.cpp/include external/ll
 
 
 # === Link Libraries ===
-target_link_libraries(FileInSight PRIVATE zstd_static tlsh llama)
-target_link_libraries(test_runner PRIVATE zstd_static tlsh)
-target_link_libraries(FISDLL PRIVATE zstd_static tlsh)
+target_link_libraries(FileInSight PRIVATE zstd_static tlsh llama sqlite3)
+target_link_libraries(test_runner PRIVATE zstd_static tlsh sqlite3)
+target_link_libraries(FISDLL PRIVATE zstd_static tlsh sqlite3)
 
 
 

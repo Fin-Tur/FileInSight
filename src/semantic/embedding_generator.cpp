@@ -59,20 +59,20 @@ bool embedding_generator::initialize(const std::string& model_path){
 }
 
 //TODO: overlapping chunks to ensure semantic meaning is kept across chunk boundaries
-sem::sem_info_file embedding_generator::chunk_text(const FileInfo& fi, size_t chunk_size){
+sem::sem_info_file embedding_generator::chunk_text(const FileInfo& fi, size_t chunk_size, size_t overlap) {
     std::ifstream file(fi.path);
     if (!file.is_open()) {
         return {};
     }
-    size_t n_chunks = (fi.size + chunk_size - 1) / chunk_size;
+    size_t n_chunks = fi.size <= chunk_size ? 1 : ((fi.size - overlap) + (chunk_size - overlap) - 1) / (chunk_size - overlap);
     std::vector<sem::sem_info_chunk> sems(n_chunks);
     char* buffer = new char[chunk_size*n_chunks]; //Assuming 384 is the embedding size | allocated mem will be deleted in sem_info_file destructor
     file.read(buffer, fi.size);
     file.close();
     for(size_t i = 0; i < n_chunks; ++i) {
         sems[i] = (sem::sem_info_chunk{
-            .chunk = buffer + i * chunk_size,
-            .chunk_size = std::min(chunk_size, fi.size - i * chunk_size),
+            .chunk = buffer + i * (chunk_size - overlap),
+            .chunk_size = std::min(chunk_size, fi.size - (i * (chunk_size - overlap))),
             .embedding = {0}
         });
     }
