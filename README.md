@@ -12,6 +12,7 @@ Library build is also possible, so extern use (as .dll or .so) is also possible.
   - Magic-Byte-Scanner to identify file types
   - Path analyzing
   - Age finder (last used > x days ago)
+  - Chunk based file embedding generation and cosine similarity search to compare semantics of text files (**llama**)
 
 -  **Similarity and Duplicate Finder**
   - Hashing-based Duplicate Scanner
@@ -37,6 +38,7 @@ Library build is also possible, so extern use (as .dll or .so) is also possible.
   - Catch2 unit testing framework integrated
 
 ---
+
 
 ## Preview and Usage
 
