@@ -1,8 +1,8 @@
 #include "sqlite3.h"
 #include <string>
 #include <vector>
-#include <FileInfo.h>
-#include <semantic_info.h>
+#include "../models/FileInfo.h"
+#include "../models/semantic_info.h"
 #include <cstring>
 
 class SemanticDB {
@@ -36,7 +36,7 @@ class SemanticDB {
     }
 
     int64_t insert_file(const FileInfo& fi){
-        const char* sql = "INSERT OR IGNORE files(path, size, modified) VALUES (?, ?, ?);";
+        const char* sql = "INSERT OR IGNORE INTO files(path, size, modified) VALUES (?, ?, ?);";
         sqlite3_stmt* stmt;
         if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) != SQLITE_OK) return -1;
         std::string p = fi.path.string();
@@ -77,7 +77,7 @@ class SemanticDB {
         sqlite3_exec(db, "COMMIT;", nullptr, nullptr, nullptr);
         return true;
     }
-    std::vector<sem::sem_info_chunk> get_chunks_by_file_id(int64_t file_id, float* embeddings, size_t n_chunks){
+    std::vector<sem::sem_info_chunk> get_chunks_by_file_id(int64_t file_id, float* embeddings){
         std::vector<sem::sem_info_chunk> result;
         const char* sql = "SELECT offset, size, embedding FROM chunks WHERE file_id = ? ORDER BY offset;";
         sqlite3_stmt* stmt;
@@ -85,8 +85,7 @@ class SemanticDB {
 
         sqlite3_bind_int64(stmt, 1, file_id);
 
-        size_t i = 0;
-        while (sqlite3_step(stmt) == SQLITE_ROW && i < n_chunks) {
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
             sem::sem_info_chunk chunk{};
             chunk.chunk_size = static_cast<size_t>(sqlite3_column_int(stmt, 1));
 
@@ -95,19 +94,19 @@ class SemanticDB {
             if (blob && blob_size == sizeof(chunk.embedding)) {
                 std::memcpy(chunk.embedding, blob, sizeof(chunk.embedding));
                 if (embeddings) {
-                    std::memcpy(embeddings + i * 384, blob, sizeof(chunk.embedding));
+                    std::memcpy(chunk.embedding, blob, sizeof(chunk.embedding));
                 }
             }
 
             result.push_back(chunk);
-            ++i;
         }
 
         sqlite3_finalize(stmt);
         return result;
     }
     
-    bool file_exists(const FileInfo& fi){const char* sql = "SELECT 1 FROM files WHERE path = ? LIMIT 1;";
+    bool file_exists(const FileInfo& fi){
+        const char* sql = "SELECT 1 FROM files WHERE path = ? LIMIT 1;";
         sqlite3_stmt* stmt;
         if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) != SQLITE_OK) return false;
 
@@ -117,6 +116,19 @@ class SemanticDB {
         bool exists = (sqlite3_step(stmt) == SQLITE_ROW);
         sqlite3_finalize(stmt);
         return exists;
+    }
+
+    int64_t get_file_id(const FileInfo& fi) {
+    const char* sql = "SELECT id FROM files WHERE path = ? LIMIT 1;";
+        sqlite3_stmt* stmt;
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) != SQLITE_OK) return -1;
+        std::string p = fi.path.string();
+        sqlite3_bind_text(stmt, 1, p.c_str(), -1, SQLITE_TRANSIENT);
+        int64_t id = -1;
+        if (sqlite3_step(stmt) == SQLITE_ROW)
+            id = sqlite3_column_int64(stmt, 0);
+        sqlite3_finalize(stmt);
+        return id;
     }
 
 };

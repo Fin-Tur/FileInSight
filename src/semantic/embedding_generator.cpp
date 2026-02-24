@@ -1,6 +1,8 @@
 #include "embedding_generator.h"
 #include <fstream>
 #include <models/semantic_info.h>
+#include "semanticDB.h"
+#include <assert.h>
 
 embedding_generator::~embedding_generator() {
     if (ctx) llama_free(ctx);
@@ -24,11 +26,12 @@ bool embedding_generator::initialize(const std::string& model_path){
     return ctx != nullptr;
 }
 
- std::vector<float> embedding_generator::generate_embedding(const std::string& input) {
-    std::vector<llama_token> tokens(input.size() +1);
+ std::vector<float> embedding_generator::generate_embedding(const char* input, size_t input_len) {
+    std::vector<llama_token> tokens(input_len +1);
+    
 
     //tokenize input (text)
-    int n_tokens = llama_tokenize(llama_model_get_vocab(model), input.c_str(), input.length(), tokens.data(), tokens.size(), true, false);
+    int n_tokens = llama_tokenize(llama_model_get_vocab(model), input, input_len, tokens.data(), tokens.size(), true, false);
     tokens.resize(n_tokens);
 
     //prepare batch
@@ -88,4 +91,49 @@ float cosine_similiarity(const sem::sem_info_chunk& c1, const sem::sem_info_chun
     float denom = sem::len(c1.embedding, n_dims) * sem::len(c2.embedding, n_dims);
     if (denom == 0.0f) return 0.0f;
     return sem::dot(c1.embedding, c2.embedding, n_dims) / denom;
+}
+
+bool embedding_generator::add_text_semantics_to_database(const FileInfo& fi, size_t chunk_size){
+    SemanticDB db;
+    if (!db.open("file_semantics.db")) return false;
+    if (!db.init_schema()) return false;
+    if (db.file_exists(fi)) return true; 
+
+    sem::sem_info_file sem_file = chunk_text(fi, chunk_size, chunk_size/6);
+    for(auto& chunk : sem_file.chunks) {
+        std::vector<float> embedding = generate_embedding(chunk.chunk, chunk.chunk_size);
+        std::copy(embedding.begin(), embedding.end(), chunk.embedding);
+    }
+
+    int64_t file_id = db.insert_file(fi);
+    if (file_id < 0) return false;
+
+    return db.insert_chunks(file_id, sem_file.chunks);
+}
+
+float embedding_generator::compare_file_semantics(const FileInfo& fi1, const FileInfo& fi2){
+    SemanticDB db;
+    if (!db.open("file_semantics.db")) return 0.0f;
+
+    int64_t file_id1 = db.get_file_id(fi1);
+    int64_t file_id2 = db.get_file_id(fi2);
+    if (file_id1 < 0 || file_id2 < 0) return 0.0f;
+
+    auto chunks1 = db.get_chunks_by_file_id(file_id1, nullptr);
+    auto chunks2 = db.get_chunks_by_file_id(file_id2, nullptr);
+
+    if (chunks1.empty() || chunks2.empty()) return 0.0f;
+
+    // Kleinere Datei als Quelle
+    const auto& src = chunks1.size() <= chunks2.size() ? chunks1 : chunks2;
+    const auto& tgt = chunks1.size() <= chunks2.size() ? chunks2 : chunks1;
+
+    float sum = 0.0f;
+    for (const auto& s : src) {
+        float best = -1.0f;
+        for (const auto& t : tgt)
+            best = std::max(best, cosine_similiarity(s, t, 384));
+        sum += best;
+    }
+    return sum / static_cast<float>(src.size());
 }
