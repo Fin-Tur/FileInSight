@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <models/FileInfo.h>
+#include <models/semantic_info.h>
 
 class embedding_generator {
     private:
@@ -18,5 +19,5 @@ class embedding_generator {
     bool add_text_semantics_to_database(const FileInfo& fi, size_t chunk_size=512);
     float compare_file_semantics(const FileInfo& fi1, const FileInfo& fi2);
     
-    ~embedding_generator() {};
+    ~embedding_generator();
 };

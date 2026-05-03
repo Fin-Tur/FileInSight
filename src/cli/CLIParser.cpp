@@ -342,12 +342,18 @@ int CLIParser::handleEncrypt(const std::string &path, std::string &password) {
     }else {
         encryptor = std::make_unique<AESEncryptor>();
     }
-    if (!encryptor->handleEncryption(path, password, config.getkeyDerivation())) {
-        std::cout << "[Error] Could not encrypt files!\n";
+    try{
+        if (!encryptor->handleEncryption(path, password, config.getkeyDerivation())) {
+                std::cout << "[Error] Could not encrypt files!\n";
+                return 1;
+            }
+            std::cout << "[Info] Encryption succesfull!\n";
+            return 0;
+    }catch(const std::exception& e) {
+        std::cerr << "[Error] Encryption failed: " << e.what() << "\n";
         return 1;
     }
-    std::cout << "[Info] Encryption succesfull!\n";
-    return 0;
+    
 }
 
 int CLIParser::handleDecrypt(const std::string &path, std::string &password) {
@@ -357,12 +363,18 @@ int CLIParser::handleDecrypt(const std::string &path, std::string &password) {
     }else {
         decryptor = std::make_unique<AESEncryptor>();
     }
-    if (!decryptor->handleDecryption(path, password, config.getkeyDerivation())) {
-        std::cout << "[Error] Could not decrypt files!\n";
+    try{
+        if (!decryptor->handleDecryption(path, password, config.getkeyDerivation())) {
+                std::cout << "[Error] Could not decrypt files!\n";
+                return 1;
+            }
+            std::cout << "[Info] Decryption succesfull!\n";
+            return 0;
+    }catch(const std::exception& e) {
+        std::cerr << "[Error] Decryption failed: " << e.what() << "\n";
         return 1;
     }
-    std::cout << "[Info] Decryption succesfull!\n";
-    return 0;
+    
 }
 
 int CLIParser::handleEntropy(const std::string &path) {

@@ -3,7 +3,9 @@
 
 #include <algorithm>
 #include <deque>
+#include <exception>
 #include <iostream>
+#include <mutex>
 #include <random>
 #include <thread>
 
@@ -29,10 +31,19 @@ bool AbstractEncryptor::handleEncryption(const std::string &src, const std::stri
     //create thread enviromen
     std::deque<std::thread> threads;
     const int maxThreads = std::max(1u, std::thread::hardware_concurrency());
+    std::exception_ptr workerException;
+    std::mutex exceptionMutex;
 
     //Create lamda worker
     auto encryptWorker = [&](const FileInfo& fi) {
-        this->encrypt(fi.path.string(), password, iterations);
+        try {
+            this->encrypt(fi.path.string(), password, iterations);
+        } catch (...) {
+            std::lock_guard<std::mutex> lock(exceptionMutex);
+            if (!workerException) {
+                workerException = std::current_exception();
+            }
+        }
     };
 
     //Start threads
@@ -52,6 +63,10 @@ bool AbstractEncryptor::handleEncryption(const std::string &src, const std::stri
         }
     }
 
+    if (workerException) {
+        std::rethrow_exception(workerException);
+    }
+
     return true;
 
 }
@@ -67,10 +82,19 @@ bool AbstractEncryptor::handleDecryption(const std::string &src, const std::stri
     //create thread enviromen
     std::deque<std::thread> threads;
     const int maxThreads = std::max(1u, std::thread::hardware_concurrency());
+    std::exception_ptr workerException;
+    std::mutex exceptionMutex;
 
     //Create lamda worker
     auto decryptWorker = [&](const FileInfo& fi) {
-        this->decrypt(fi.path.string(), password, iterations);
+        try {
+            this->decrypt(fi.path.string(), password, iterations);
+        } catch (...) {
+            std::lock_guard<std::mutex> lock(exceptionMutex);
+            if (!workerException) {
+                workerException = std::current_exception();
+            }
+        }
     };
 
     //Start threads
@@ -88,6 +112,10 @@ bool AbstractEncryptor::handleDecryption(const std::string &src, const std::stri
         if (t.joinable()) {
             t.join();
         }
+    }
+
+    if (workerException) {
+        std::rethrow_exception(workerException);
     }
 
     return true;

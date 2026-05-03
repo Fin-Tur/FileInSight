@@ -6,13 +6,13 @@
 
 embedding_generator::~embedding_generator() {
     if (ctx) llama_free(ctx);
-    if (model) llama_free_model(model);
+    if (model) llama_model_free(model);
 }
 
 bool embedding_generator::initialize(const std::string& model_path){
     llama_model_params model_params = llama_model_default_params();
 
-    model = llama_load_model_from_file(model_path.c_str(), model_params);
+    model = llama_model_load_from_file(model_path.c_str(), model_params);
     if (!model) {
         return false;
     }
@@ -22,7 +22,7 @@ bool embedding_generator::initialize(const std::string& model_path){
     ctx_params.n_batch = 512;
     ctx_params.embeddings = true; // Enable embedding extraction
 
-    ctx = llama_new_context_with_model(model, ctx_params);
+    ctx = llama_init_from_model(model, ctx_params);
     return ctx != nullptr;
 }
 
@@ -52,7 +52,7 @@ bool embedding_generator::initialize(const std::string& model_path){
     }
 
     //extract embed
-    int n_embd = llama_n_embd(model);
+    int n_embd = llama_model_n_embd(model);
     float* embd = llama_get_embeddings(ctx);
     
     std::vector<float> result(embd, embd + n_embd);
@@ -87,7 +87,7 @@ sem::sem_info_file embedding_generator::chunk_text(const FileInfo& fi, size_t ch
     };
 }
 
-float cosine_similiarity(const sem::sem_info_chunk& c1, const sem::sem_info_chunk& c2, size_t n_dims){
+float embedding_generator::cosine_similiarity(const sem::sem_info_chunk& c1, const sem::sem_info_chunk& c2, size_t n_dims){
     float denom = sem::len(c1.embedding, n_dims) * sem::len(c2.embedding, n_dims);
     if (denom == 0.0f) return 0.0f;
     return sem::dot(c1.embedding, c2.embedding, n_dims) / denom;
